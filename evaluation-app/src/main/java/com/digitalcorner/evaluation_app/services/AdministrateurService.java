@@ -36,7 +36,7 @@ public class AdministrateurService {
             administrateur.setNom(registrationRequest.getNom());
             administrateur.setPrenom(registrationRequest.getPrenom());
             administrateur.setEmail(registrationRequest.getEmail());
-            administrateur.setRole(Administrateur.Role.SUPERADMIN);
+            administrateur.setRole(Administrateur.Role.ADMIN);
             administrateur.setVilleCentre(registrationRequest.getVilleCentre());
             administrateur.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
             Administrateur saved = administrateurRepository.save(administrateur);
