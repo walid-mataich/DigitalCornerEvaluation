@@ -1,6 +1,42 @@
 import React from 'react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import UserService from '../services/UserService'
+
 
 function Form() {
+
+const [email, setEmail] = useState('')
+const [password, setPassword] = useState('')
+const [error, setError] = useState('')
+const navigate = useNavigate();
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+        const userData = await UserService.login(email, password)
+        console.log(userData)
+        if (userData.token) {
+            localStorage.setItem('token', userData.token)
+            localStorage.setItem('role', userData.role)
+            navigate('/test')
+        }else{
+            setError(userData.message)
+        }
+        
+    } catch (error) {
+        console.log(error)
+        setError(error.message)
+        setTimeout(()=>{
+            setError('');
+        }, 5000);
+    }
+}
+
+
+
+
   return (
     <div>
         <section className="bg-white dark:bg-green-900 min-h-screen flex items-center justify-center">
@@ -13,7 +49,7 @@ function Form() {
       Accédez aux données et visualiser les statistiques.
     </p>
     
-    <form className="max-w-sm mx-auto">
+    <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
   <div className="mb-5">
     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Votre email</label>
     <input 
@@ -22,6 +58,7 @@ function Form() {
       className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-50 dark:border-green-300 dark:placeholder-gray-500 dark:text-gray-900 dark:focus:ring-green-500 dark:focus:border-green-500" 
       placeholder="nom@exemple.com" 
       required 
+      onChange={(e)=>setEmail(e.target.value)}
     />
   </div>
   <div className="mb-5">
@@ -30,6 +67,7 @@ function Form() {
       type="password" 
       id="password" 
       className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-50 dark:border-green-300 dark:placeholder-gray-500 dark:text-gray-900 dark:focus:ring-green-500 dark:focus:border-green-500" 
+      onChange={(e)=>setPassword(e.target.value)}
       required 
     />
   </div>
