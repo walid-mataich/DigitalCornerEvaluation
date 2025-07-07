@@ -26,4 +26,9 @@ public class VilleCentre {
     @JsonManagedReference
     private List<Evaluation> evaluations;
 
+    @OneToMany(mappedBy = "villeCentre",cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Administrateur> administrateurs;
+
+
 }
