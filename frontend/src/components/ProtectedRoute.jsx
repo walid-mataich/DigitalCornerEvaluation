@@ -8,6 +8,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
   const [token, setToken] = useState(localStorage.getItem("TOKEN"));
   const [loading, setLoading] = useState(true);
   const [fetched, setFetched] = useState(false);
+  
 
   useEffect(() => {
     const fetchUser = async () => {

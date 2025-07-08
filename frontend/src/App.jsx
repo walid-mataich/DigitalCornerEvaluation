@@ -15,6 +15,9 @@ import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
+import Evaluation from "./pages/Evaluation";
+import SatisfactionRadioGroup from "./components/SatisfactionRadioGroup";
+import ChooseCenter from "./pages/ChooseCenter";
 
 function App() {
   const router = createBrowserRouter(
@@ -26,6 +29,8 @@ function App() {
         <Route path="/avis" element={<EmplyeHome />} />
         <Route path="/test" element={<Test />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/evaluation/:codeCentre" element={<Evaluation />} />
+        <Route path="/evaluation" element={<ChooseCenter />} />
 
         <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
           <Route path="/admin">
