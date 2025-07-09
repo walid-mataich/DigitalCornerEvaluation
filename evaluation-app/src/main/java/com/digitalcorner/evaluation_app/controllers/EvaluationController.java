@@ -9,7 +9,6 @@ import java.util.List;
 
 
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/evaluations")
 @RestController
 public class EvaluationController {
     final EvaluationService evaluationService;
@@ -19,25 +18,27 @@ public class EvaluationController {
     }
 
 //    api to add evaluations : st3mlo hakka : expl: http://localhost:8080/api/evaluations/add?idCentre=1&avis="tres satisfais"
-    @PostMapping("/add")
+    @PostMapping("/superadmin/evaluations/add")
     public void addEvaluation(@RequestParam Long idCentre, @RequestParam String avis) {
         evaluationService.addEvaluation(avis, idCentre);
     }
 
     // api to delete evaluation
-    @DeleteMapping("/deleteById")
+    @DeleteMapping("/superadmin/evaluations/deleteById")
     void deleteEvaluation(@RequestParam Long idEvaluation) {
         evaluationService.deleteEvaluation(idEvaluation);
     }
 
 
     //api to delete all evaluations dyal centre wa7d
-    @DeleteMapping("/deleteByCenter")
+    @DeleteMapping("/adminsuperadmin/evaluations/deleteByCenter")
     void deleleByCente(@RequestParam Long idCenter) {
         evaluationService.deleteEvaluationsByCenter(idCenter);
     }
 
-    @GetMapping
+
+
+    @GetMapping("/superadmin/evaluations")
     public List<Evaluation> getEvaluations() {
         return evaluationService.getEvaluations();
     }

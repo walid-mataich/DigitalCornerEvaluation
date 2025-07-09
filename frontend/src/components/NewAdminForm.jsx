@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../api/axios";
 import React, { useEffect, useState } from "react";
 
 function NewAdminForm() {
@@ -7,17 +7,22 @@ function NewAdminForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [centre, setCentre] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("TOKEN"));
 
   const [centres, setCentres] = useState([]);
 
   useEffect(() => {
     const fetchCentres = async () => {
       try {
-        //const res = await axios.get(""); // Remplace par ton URL réelle
-        setCentres(res.data); 
+        const res = await api.get("/superadmin/centres", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setCentres(res.data);
       } catch (err) {
         console.error("Erreur lors du chargement des centres :", err.message);
-        setCentres([]); 
+        setCentres([]);
       }
     };
     fetchCentres();
@@ -30,9 +35,8 @@ function NewAdminForm() {
       formData.append("prenom", prenom);
       formData.append("email", email);
       formData.append("password", password);
-      formData.append("centre_id", centre);
 
-      //await axios.post("", formData); 
+      await api.post(`/auth/register/${centre}`, formData);
       alert("Administrateur ajouté");
 
       // Réinitialisation du formulaire
@@ -61,7 +65,10 @@ function NewAdminForm() {
         <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
           {/* Nom */}
           <div className="mb-5">
-            <label htmlFor="nom" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label
+              htmlFor="nom"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
               Nom :
             </label>
             <input
@@ -77,7 +84,10 @@ function NewAdminForm() {
 
           {/* Prénom */}
           <div className="mb-5">
-            <label htmlFor="prenom" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label
+              htmlFor="prenom"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
               Prénom :
             </label>
             <input
@@ -93,7 +103,10 @@ function NewAdminForm() {
 
           {/* Email */}
           <div className="mb-5">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label
+              htmlFor="email"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
               Email :
             </label>
             <input
@@ -109,7 +122,10 @@ function NewAdminForm() {
 
           {/* Mot de passe */}
           <div className="mb-5">
-            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label
+              htmlFor="password"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
               Mot de passe :
             </label>
             <input
@@ -124,7 +140,10 @@ function NewAdminForm() {
 
           {/* Centre */}
           <div className="mb-5">
-            <label htmlFor="centre" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label
+              htmlFor="centre"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
               Ville :
             </label>
             <select
