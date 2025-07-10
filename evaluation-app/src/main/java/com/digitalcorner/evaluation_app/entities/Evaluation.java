@@ -30,6 +30,4 @@ public class Evaluation {
     @JsonBackReference
     @JoinColumn(name ="id_centre",nullable = false )
     private VilleCentre villeCentre;
-
-
 }

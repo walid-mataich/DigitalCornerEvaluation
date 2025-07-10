@@ -8,7 +8,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Acceuil from "./pages/Acceuil";
-import NewAdminForm from "./components/NewAdminForm";
 import EmplyeHome from "./pages/EmplyeHome";
 import Test from "./pages/test";
 import Unauthorized from "./pages/Unauthorized";
@@ -17,6 +16,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
 import ChooseCenter from "./pages/ChooseCenter";
 import CentrePage from "./pages/CentrePage";
+import AdministrateursListe from "./pages/AdministrateursListe";
+import AjouterAdmin from "./pages/AjouterAdmin";
 
 function App() {
   const router = createBrowserRouter(
@@ -38,7 +39,8 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={["SUPERADMIN"]} />}>
           <Route path="/general">
             <Route path="dashboard" element={<SuperAdminDashboard />} />
-            <Route path="newadmin" element={<NewAdminForm />} />
+            <Route path="administrateurs" element={<AdministrateursListe /> } />
+            <Route path="newadmin" element={<AjouterAdmin/>} />
             <Route path="centres" element={<CentrePage />} />
 
           </Route>
