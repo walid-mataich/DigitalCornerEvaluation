@@ -1,8 +1,11 @@
 import React from 'react'
+import AdministrateurLayer from "../Layers/AdministrateurLayer"
 
 const AdminDashboard = () => {
   return (
-    <div>AdminDashboard</div>
+    <div>
+      <AdministrateurLayer/>
+    </div>
   )
 }
 
