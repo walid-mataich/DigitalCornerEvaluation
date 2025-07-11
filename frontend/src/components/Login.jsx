@@ -2,15 +2,18 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
+import { Riple } from "react-loading-indicators";
 
 function Form() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+   setLoading(true);
 
     try {
       const userData = await UserService.login(email, password);
@@ -32,6 +35,8 @@ function Form() {
       setTimeout(() => {
         setError("");
       }, 5000);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,6 +102,9 @@ function Form() {
               </svg>
             </button>
           </form>
+          {loading && (
+            <Riple color="#32cd32" size="medium" text="" textColor="" />
+          )}
         </div>
       </section>
     </div>

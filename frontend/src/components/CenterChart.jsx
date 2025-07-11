@@ -11,7 +11,7 @@ const chartConfig = {
   type: "pie",
   width: 240,
   height: 240,
-  series: [44, 55, 13, 43, 22],
+  series: [44, 55, 13, 43],
   options: {
     chart: {
       toolbar: {
@@ -24,23 +24,29 @@ const chartConfig = {
     dataLabels: {
       enabled: false,
     },
-    colors: ["#020617", "#ff8f00", "#00897b", "#1e88e5", "#d81b60"],
+    colors: ["#33ff80", "#61ff33", "#f49d0e", "#f40e0e"],
     legend: {
       show: false,
     },
+    labels: [
+      "Satisfait",
+      "Tres Satisfait",
+      "Pas Satisfait",
+      "pas du tout Satisfait",
+    ],
   },
 };
 
 export default function CenterChart() {
   return (
-    <Card className="h-1 mb-0 mt-0">
+    <Card className="h-0 mb-0 mt-0">
       <CardHeader
         floated={false}
         shadow={false}
         color="transparent"
-        className="flex flex-col gap-2 rounded-none md:flex-row md:items-center p-4"
+        className="flex flex-col gap-2 rounded-none md:flex-row md:items-center px-1"
       >
-        <div className="w-max rounded-lg bg-gray-900 p-5 text-white">
+        <div className="w-max  rounded-lg bg-gray-900 p-5 text-white">
           <Square3Stack3DIcon className="h-6 w-6" />
         </div>
         <div>

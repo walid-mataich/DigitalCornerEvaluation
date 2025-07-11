@@ -2,13 +2,13 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
+import { Riple } from "react-loading-indicators";
 
 const ProtectedRoute = ({ allowedRoles }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("TOKEN"));
   const [loading, setLoading] = useState(true);
   const [fetched, setFetched] = useState(false);
-  
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -42,7 +42,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
   if (loading) {
     return (
       <div className="fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center">
-        Loading
+        <Riple color="#32cd32" size="medium" text="" textColor="" />
       </div>
     );
   }
