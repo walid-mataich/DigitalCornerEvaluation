@@ -15,8 +15,9 @@ function AdministrateursListe() {
                         Authorization: `Bearer ${token}`,
                     }
                 });
-
-                setAdministrateurs(res.data)
+                const { adminList = [] } = res.data;
+                console.log(res.data);
+                setAdministrateurs(adminList)
                 
             } catch (error) {
                 console.error("Affichage des administrateurs", error.message);
@@ -73,7 +74,7 @@ function AdministrateursListe() {
                       {a.email}
                     </td>
                     <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
-                         {a.villeCentre?.nomCentre || "Super Admin"}
+                         
                     </td>
                     <td className="px-6 py-4 text-center space-x-2">
                       <button className="px-4 py-1 text-sm font-medium text-white bg-green-700 hover:bg-green-800 rounded-full">
