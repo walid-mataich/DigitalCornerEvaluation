@@ -1,4 +1,4 @@
 package com.digitalcorner.evaluation_app.dto;
 
-public class CentreRequest {
+public class MonthlyAvis {
 }

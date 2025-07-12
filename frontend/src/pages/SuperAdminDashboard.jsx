@@ -6,7 +6,6 @@ import SatisfactionChart from "../components/SatisfactionChart";
 import api from "../api/axios";
 import { Riple } from "react-loading-indicators";
 
-
 const SuperAdminDashboard = () => {
   const [centersData, setCentersData] = useState([]);
   const [token] = useState(localStorage.getItem("TOKEN"));
@@ -41,33 +40,30 @@ const SuperAdminDashboard = () => {
         <>
           <DashboardNavbar />
           <div className="grid gap-4 p-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 auto-rows-min">
-            
             <div className="lg:col-span-4 lg:row-span-4">
               <Chart1 />
             </div>
 
-            
             <div className="lg:col-span-2 lg:row-span-4">
               <LowestSatisfactionCard
-                badPercentage={centersData[0]?.pasDuToutSatisfaitNb}
-                centerName="Benguerir SI"
+                badPercentage={(
+                  (centersData[0]?.pasDuToutSatisfaitNb /
+                    (centersData[0]?.tresSatisfaitNb +
+                      centersData[0]?.satisfaitNb +
+                      centersData[0]?.peuSatisfaitNb +
+                      centersData[0]?.pasDuToutSatisfaitNb)) *
+                  100
+                ).toFixed(2)}
+                centerName={centersData[0]?.villeCentreNom}
               />
             </div>
 
-            
-            {centersData.slice(0, 3).map((center, index) => (
-              <div key={index} className="lg:col-span-2 lg:row-span-3">
-                <SatisfactionChart
-                  data={buildChartData(center)}
-                  centerName={center.villeCentreNom}
-                />
-              </div>
-            ))}
-          </div>
-
-          
-          <div className="flex justify-end">
-            <button className="flex items-center text-center rounded-md mb-2 mx-9 cursor-pointer border border-green-600 py-1 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-green-600 hover:text-white hover:bg-green-600 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+            <div className="flex col-span-1 sm:col-span-2 lg:col-span-6 pl-4 ">
+              
+                <h2 className="text-lg font-semibold text-green-700 text-left">
+                  Taux de satisfaction pour ce mois
+                </h2>
+                <button className="flex items-center text-center rounded-md  mx-9 cursor-pointer border border-green-600 py-1 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-green-600 hover:text-white hover:bg-green-600 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
               Afficher plus
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -82,12 +78,25 @@ const SuperAdminDashboard = () => {
                 />
               </svg>
             </button>
+              
+            </div>
+
+            {centersData.slice(0, 3).map((center, index) => (
+              <div key={index} className="lg:col-span-2 lg:row-span-3">
+                <SatisfactionChart
+                  data={buildChartData(center)}
+                  centerName={center.villeCentreNom}
+                />
+              </div>
+            ))}
           </div>
+
+          
         </>
       ) : (
         <div className="fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center">
-        <Riple color="#32cd32" size="medium" text="" textColor="" />
-      </div>
+          <Riple color="#32cd32" size="medium" text="" textColor="" />
+        </div>
       )}
     </>
   );
