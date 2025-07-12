@@ -8,16 +8,16 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Acceuil from "./pages/Acceuil";
-import NewAdminForm from "./components/NewAdminForm";
 import EmplyeHome from "./pages/EmplyeHome";
 import Test from "./pages/test";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
-import Evaluation from "./pages/Evaluation";
-import SatisfactionRadioGroup from "./components/SatisfactionRadioGroup";
 import ChooseCenter from "./pages/ChooseCenter";
+import CentrePage from "./pages/CentrePage";
+import AdministrateursListe from "./pages/AdministrateursListe";
+import AjouterAdmin from "./pages/AjouterAdmin";
 
 function App() {
   const router = createBrowserRouter(
@@ -25,11 +25,9 @@ function App() {
       <>
         <Route index path="/" element={<Acceuil />} />
         <Route path="/login" element={<Form />} />
-        <Route path="/AjouterAdministrateur" element={<NewAdminForm />} />
         <Route path="/avis" element={<EmplyeHome />} />
         <Route path="/test" element={<Test />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route path="/evaluation/:codeCentre" element={<Evaluation />} />
         <Route path="/evaluation" element={<ChooseCenter />} />
 
         <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
@@ -41,7 +39,10 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={["SUPERADMIN"]} />}>
           <Route path="/general">
             <Route path="dashboard" element={<SuperAdminDashboard />} />
-            <Route path="newadmin" element={<NewAdminForm />} />
+            <Route path="administrateurs" element={<AdministrateursListe /> } />
+            <Route path="newadmin" element={<AjouterAdmin/>} />
+            <Route path="centres" element={<CentrePage />} />
+
           </Route>
         </Route>
       </>
