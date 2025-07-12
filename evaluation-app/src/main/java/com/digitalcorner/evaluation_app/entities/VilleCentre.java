@@ -22,6 +22,10 @@ public class VilleCentre {
 
     private Long codeCentre;
 
+
+
+
+
     @OneToMany(mappedBy = "villeCentre", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Evaluation> evaluations;
