@@ -10,7 +10,7 @@ import java.util.Map;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AllCentersResponce {
+public class CentersResponce {
     private int total;
     private Map<Integer, Map<String,MonthlyAvis>> TotalMonthlyAvis;
 }

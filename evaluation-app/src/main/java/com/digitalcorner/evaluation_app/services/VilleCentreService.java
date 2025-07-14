@@ -1,7 +1,7 @@
 package com.digitalcorner.evaluation_app.services;
 
 
-import com.digitalcorner.evaluation_app.dto.AllCentersResponce;
+import com.digitalcorner.evaluation_app.dto.CentersResponce;
 import com.digitalcorner.evaluation_app.dto.CentreResponse;
 import com.digitalcorner.evaluation_app.dto.MonthlyAvis;
 import com.digitalcorner.evaluation_app.entities.Evaluation;
@@ -96,9 +96,19 @@ public class VilleCentreService {
 return result;
     }
 
-    public AllCentersResponce getGeneralCenterData(){
-        List<Evaluation> allEvaluations = evaluationRepository.findAll();
-        AllCentersResponce allCentersResponce = new AllCentersResponce();
+    public CentersResponce getGeneralCenterData(Long centreId){
+        List<Evaluation> allEvaluations = new ArrayList<>() ;
+        if (centreId == null){
+            allEvaluations = evaluationRepository.findAll();
+        } else{
+            Optional<VilleCentre> optCentre = villeCentreRepository.findById(centreId);
+            if (optCentre.isPresent()){allEvaluations = evaluationRepository.findByVilleCentre(optCentre.get());
+            }else {
+                return null;
+            }
+        }
+
+        CentersResponce allCentersResponce = new CentersResponce();
         Map<Integer, Map<String,MonthlyAvis>> totalYearlyMonthlyAvis = new HashMap<>();
 
         for (Evaluation evaluation : allEvaluations) {

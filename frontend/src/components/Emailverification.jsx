@@ -1,12 +1,39 @@
 import { useState } from "react";
+import api from "../api/axios";
+import { Riple } from "react-loading-indicators";
 
 const EmailVerification = ({ onSubmit }) => {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onSubmit) {
-      onSubmit(email);
+    setLoading(true);
+
+    setErrorMessage("");
+
+    try {
+      const response = await api.post(
+        `/auth/forgotpassword/verifyMail/${email}`
+      );
+
+      if (response.status === 200) {
+        setLoading(false);
+        if (onSubmit) {
+          onSubmit(email);
+        }
+      }
+    } catch (error) {
+      setLoading(false);
+
+      if (error.response && error.response.status === 403) {
+        setErrorMessage("Adresse e-mail non reconnue ");
+      } else {
+        setErrorMessage(
+          "Une erreur s’est produite. Veuillez réessayer plus tard."
+        );
+      }
     }
   };
 
@@ -23,6 +50,11 @@ const EmailVerification = ({ onSubmit }) => {
           Veuillez saisir votre adresse e-mail pour recevoir un code de
           vérification.
         </p>
+        {errorMessage && (
+          <div className="text-red-600 bg-red-100 border border-red-400 px-4 py-2 rounded-md text-sm">
+            {errorMessage}
+          </div>
+        )}
 
         <div>
           <label
@@ -49,6 +81,7 @@ const EmailVerification = ({ onSubmit }) => {
           Envoyer le code
         </button>
       </form>
+      {loading && <Riple color="#32cd32" size="medium" text="" textColor="" />}
     </div>
   );
 };

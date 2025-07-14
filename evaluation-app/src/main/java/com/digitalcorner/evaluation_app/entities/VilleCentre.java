@@ -1,6 +1,7 @@
 package com.digitalcorner.evaluation_app.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ public class VilleCentre {
     private List<Evaluation> evaluations;
 
     @OneToMany(mappedBy = "villeCentre",cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Administrateur> administrateurs;
 
 

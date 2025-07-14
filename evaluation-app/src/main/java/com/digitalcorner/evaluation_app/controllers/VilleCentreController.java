@@ -1,7 +1,7 @@
 package com.digitalcorner.evaluation_app.controllers;
 
 
-import com.digitalcorner.evaluation_app.dto.AllCentersResponce;
+import com.digitalcorner.evaluation_app.dto.CentersResponce;
 import com.digitalcorner.evaluation_app.dto.CentreResponse;
 import com.digitalcorner.evaluation_app.entities.VilleCentre;
 import com.digitalcorner.evaluation_app.services.VilleCentreService;
@@ -31,7 +31,12 @@ public class VilleCentreController {
     }
 
     @GetMapping("/total")
-    public AllCentersResponce getTotal() {
-        return  villeCentreService.getGeneralCenterData();
+    public CentersResponce getTotal() {
+        return  villeCentreService.getGeneralCenterData(null);
+    }
+
+    @GetMapping("/centreData/{id}")
+    public CentersResponce getCentreData(@PathVariable Long id) {
+        return villeCentreService.getGeneralCenterData(id);
     }
 }

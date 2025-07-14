@@ -2,6 +2,7 @@ package com.digitalcorner.evaluation_app.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,10 +40,11 @@ public class Administrateur implements UserDetails {
     }
 
     @ManyToOne
-    @JsonBackReference
+    @JsonIgnore
     private  VilleCentre villeCentre;
 
     @OneToOne(mappedBy = "administrateur",cascade = CascadeType.ALL , orphanRemoval = true)
+    @JsonIgnore
     private ForgotPassword forgotPassword;
 
     @Override

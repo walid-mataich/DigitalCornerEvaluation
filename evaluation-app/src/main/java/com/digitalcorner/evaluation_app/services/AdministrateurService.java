@@ -279,6 +279,7 @@ public ResponseEntity<String> modifyPassword(String newPassword, String email){
         if (adminOpt.isPresent()) {
             Administrateur admin = adminOpt.get();
             admin.setPassword(passwordEncoder.encode(newPassword));
+            administrateurRepository.save(admin);
             return ResponseEntity.ok("password modified successfully");
         }
 

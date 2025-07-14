@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import api from "../api/axios";
+
 
 export default function OTPForm({ onSubmit, onResend }) {
   const inputRefs = useRef([]);
@@ -26,9 +28,11 @@ export default function OTPForm({ onSubmit, onResend }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const code = otp.join("");
+
+    
     if (code.length === 6) {
       if (onSubmit) onSubmit(code);
       else alert(`Code soumis : ${code}`);

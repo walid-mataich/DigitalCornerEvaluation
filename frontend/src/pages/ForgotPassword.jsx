@@ -10,46 +10,57 @@ const ForgotPassword = () => {
   const [step1, setStep1] = useState(true);
   const [step2, setStep2] = useState(false);
   const [step3, setStep3] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const navigate = useNavigate();
 
   const handleEmailverification = async (email) => {
     try {
-      // const response = await api.post(
-      //   `/auth/forgotpassword/verifyMail/${email}`
-      // );
-      // const result = await response.text();
+      setEmail(email);
       setStep1(false);
       setStep2(true);
-
-      // if (response.ok) {
-      //   alert(result);
-      //   setStep1(false);
-      //   setStep2(true);
-      // } else {
-      //   alert("err : " + result);
-      // }
     } catch (error) {
       console.error("Erreur de vérification e-mail", error);
     }
   };
 
-  const handleOTPSubmit = async (otp) => {
+  const handleOTPSubmit = async (code) => {
     try {
-      setStep2(false);
-      setStep3(true);
-      // const response = await api.post(
-      //   `/auth/forgotpassword/verifyOTP/${otp}`
-      // );
-      // const result = await response.text();
-
-      // if (response.ok) {
-      //   alert(result);
-      //   setStep2(false);
-      //   setStep3(true);
-      // } else {
-      //   alert("err : " + result);
-      // }
+      const response = await api.post(
+        `/auth/forgotpassword/verifyOTP/${code}/${email}`
+      );
+      console.log(response);
+      if (response.status === 200) {
+        console.log("OTP vérifié avec succès");
+        setStep2(false);
+        setStep3(true);
+      } else {
+        alert("Erreur lors de la vérification de l'OTP");
+        return;
+      }
     } catch (error) {
       console.error("Erreur de vérification OTP", error);
+    }
+  };
+
+  const handleModifyPassword = async (newPassword, passwordonf) => {
+    try {
+      if (newPassword !== passwordonf) {
+        alert("Les mots de passe ne correspondent pas");
+        return;
+      }
+      const response = await api.post(
+        `/auth/forgotpassword/modifyPassword/${email}/${newPassword}`
+      );
+      console.log(response);
+      if (response.status === 200) {
+        alert("Mot de passe modifié avec succès");
+        navigate("/login");
+      } else {
+        alert("Erreur lors de la modification du mot de passe");
+      }
+    } catch (error) {
+      console.error("Erreur de modification du mot de passe", error);
     }
   };
 
@@ -58,7 +69,7 @@ const ForgotPassword = () => {
       {" "}
       {step1 && <Emailverification onSubmit={handleEmailverification} />}
       {step2 && <OTPForm onSubmit={handleOTPSubmit} />}
-      {step3 && <ModifyPassword />}
+      {step3 && <ModifyPassword onSubmit={handleModifyPassword} />}
     </div>
   );
 };

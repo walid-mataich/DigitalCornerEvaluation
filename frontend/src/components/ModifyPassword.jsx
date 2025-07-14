@@ -1,6 +1,16 @@
-import React from "react";
+import { useState } from "react";
 
-const ModifyPassword = () => {
+const ModifyPassword = ({ onSubmit }) => {
+  const [Password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (onSubmit) {
+      onSubmit(Password, passwordConfirm);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-screen">
       <div className="w-full p-8 bg-white rounded-2xl shadow-lg sm:max-w-md">
@@ -8,7 +18,7 @@ const ModifyPassword = () => {
           Modifier le mot de passe
         </h2>
 
-        <form className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
               htmlFor="password"
@@ -20,6 +30,8 @@ const ModifyPassword = () => {
               type="password"
               id="password"
               placeholder="••••••••"
+              value={Password}
+              onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
@@ -35,13 +47,13 @@ const ModifyPassword = () => {
             <input
               type="password"
               id="confirm-password"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
               placeholder="••••••••"
               required
               className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
-
-        
 
           <button
             type="submit"
