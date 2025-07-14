@@ -1,20 +1,25 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import OCPFR from "../assets/OCPFR.png";
-
 const DashboardNavbar = () => {
   return (
     <div>
       <nav className="block mb-2  px-4 py-2  bg-white shadow-md rounded-md lg:px-8 lg:py-3 ">
         <div className="container flex flex-wrap items-center justify-between  text-slate-800">
-          <a
-            href="#"
+          <Link
+            to="/general/dashboard"
             className="mr-4 block cursor-pointer py-1.5 text-base text-slate-800 font-semibold"
           >
             <img src={OCPFR} className="h-7" alt="OCP Logo" />
-          </a>
+          </Link>
 
           <div className="hidden lg:block">
             <ul className="flex flex-col gap-2 mt-2 mb-4 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+              <li className="flex items-center p-1 text-sm gap-x-2 text-green-700">
+                <Link to="/general/dashboard" className="flex items-center">
+                  Dashboard
+                </Link>
+              </li>
               <li className="flex items-center p-1 text-sm gap-x-2 text-green-700">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -31,9 +36,12 @@ const DashboardNavbar = () => {
                   />
                 </svg>
 
-                <a href="#" className="flex items-center">
+                <Link
+                  to="/general/administrateurs"
+                  className="flex items-center"
+                >
                   Administrateurs
-                </a>
+                </Link>
               </li>
               <li className="flex items-center p-1 text-sm gap-x-2 text-green-700">
                 <svg
@@ -50,10 +58,9 @@ const DashboardNavbar = () => {
                     d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z"
                   />
                 </svg>
-
-                <a href="#" className="flex items-center">
+                <Link to="/general/centres" className="flex items-center">
                   Centres
-                </a>
+                </Link>
               </li>
               <li className="flex items-center p-1 text-sm gap-x-2 text-green-700">
                 <svg
@@ -72,7 +79,7 @@ const DashboardNavbar = () => {
                 </svg>
 
                 <a href="#" className="flex items-center">
-                  Rapports
+                  Reports
                 </a>
               </li>
               <li className="flex items-center p-1 text-sm gap-x-2 text-green-700">
@@ -92,7 +99,7 @@ const DashboardNavbar = () => {
                 </svg>
 
                 <a href="#" className="flex items-center">
-                  Profil
+                  Compte
                 </a>
               </li>
             </ul>

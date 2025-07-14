@@ -1,18 +1,25 @@
 package com.digitalcorner.evaluation_app.services;
 
 
+import com.digitalcorner.evaluation_app.dto.MailBody;
 import com.digitalcorner.evaluation_app.dto.RequestResponse;
 import com.digitalcorner.evaluation_app.entities.Administrateur;
+import com.digitalcorner.evaluation_app.entities.ForgotPassword;
 import com.digitalcorner.evaluation_app.repositories.AdministrateurRepository;
+import com.digitalcorner.evaluation_app.repositories.ForgotPasswordRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 
 @Service
 public class AdministrateurService {
@@ -28,6 +35,14 @@ public class AdministrateurService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+
+    @Autowired
+    private ForgotPasswordRepository  forgotPasswordRepository;
+
+
+    @Autowired
+    private MailService mailService;
 
     public RequestResponse register(RequestResponse registrationRequest){
         RequestResponse requestResponse = new RequestResponse();
@@ -201,6 +216,80 @@ public class AdministrateurService {
         }
         return reqRes;
 
+    }
+
+
+
+    public ResponseEntity<String> verifyEmail(String email){
+    Administrateur administrateur = administrateurRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("please provide a valid email"));
+
+    Integer OTP = otpGenerator();
+
+    Optional<ForgotPassword> fpOpt = forgotPasswordRepository.findByAdministrateur(administrateur);
+
+
+        if (fpOpt.isPresent()) {
+            ForgotPassword fp = fpOpt.get();
+            fp.setOtp(OTP);
+            fp.setExpirationTime(new Date(System.currentTimeMillis() + 5 * 60 * 1000));
+            forgotPasswordRepository.save(fp);
+        } else {
+
+            ForgotPassword fp = new ForgotPassword();
+            fp.setAdministrateur(administrateur);
+            fp.setOtp(OTP);
+            fp.setExpirationTime(new Date(System.currentTimeMillis() + 5 * 60 * 1000));
+            forgotPasswordRepository.save(fp);
+        }
+
+
+    MailBody mailbody = MailBody.builder()
+            .to(email)
+            .text("OTP for password reset : " + OTP)
+            .subject("OTP for password reset")
+            .build();
+
+
+    mailService.sendSimpleMail(mailbody);
+
+
+
+    return ResponseEntity.ok("email sent for verification");
+}
+
+
+public ResponseEntity<String> verifyOTP(Integer otp, String email){
+
+    Administrateur administrateur = administrateurRepository.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("please provide a valid email"));
+
+    ForgotPassword fp = forgotPasswordRepository.findByOtpAndAdministrateur(otp,administrateur).orElseThrow(()-> new RuntimeException("invalid OTP for email : " + email));
+
+    if (fp.getExpirationTime().before(Date.from(Instant.now()))){
+        System.out.println("Trying to delete OTP with id: " + fp.getFpid());
+        forgotPasswordRepository.deleteById(fp.getFpid());
+        return new ResponseEntity<>("Otp has expired", HttpStatus.EXPECTATION_FAILED);
+    }
+
+    return ResponseEntity.ok("Otp verified !");
+}
+
+public ResponseEntity<String> modifyPassword(String newPassword, String email){
+        Optional<Administrateur> adminOpt = administrateurRepository.findByEmail(email);
+
+        if (adminOpt.isPresent()) {
+            Administrateur admin = adminOpt.get();
+            admin.setPassword(passwordEncoder.encode(newPassword));
+            return ResponseEntity.ok("password modified successfully");
+        }
+
+    return new ResponseEntity<>("Failde to modify password", HttpStatus.EXPECTATION_FAILED);
+
+}
+
+
+    private Integer otpGenerator(){
+        Random random = new Random();
+        return random.nextInt(100_000,999_999);
     }
 
 

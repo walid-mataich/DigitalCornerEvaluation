@@ -42,7 +42,8 @@ public class Administrateur implements UserDetails {
     @JsonBackReference
     private  VilleCentre villeCentre;
 
-
+    @OneToOne(mappedBy = "administrateur",cascade = CascadeType.ALL , orphanRemoval = true)
+    private ForgotPassword forgotPassword;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

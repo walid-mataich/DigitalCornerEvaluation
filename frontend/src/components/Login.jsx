@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import { Riple } from "react-loading-indicators";
+import { Link } from "react-router-dom";
 
 function Form() {
   const [email, setEmail] = useState("");
@@ -51,57 +52,72 @@ function Form() {
             Accédez aux données et visualiser les statistiques.
           </p>
 
-          <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
-            <div className="mb-5">
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Votre email
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-50 dark:border-green-300 dark:placeholder-gray-500 dark:text-gray-900 dark:focus:ring-green-500 dark:focus:border-green-500"
-                placeholder="nom@exemple.com"
-                required
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="mb-5">
-              <label
-                htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Votre mot de passe
-              </label>
-              <input
-                type="password"
-                id="password"
-                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-green-50 dark:border-green-300 dark:placeholder-gray-500 dark:text-gray-900 dark:focus:ring-green-500 dark:focus:border-green-500"
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900 w-full"
-            >
-              Se connecter
-              <svg
-                className="ml-2 -mr-1 w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </button>
-          </form>
+          <form
+  className="max-w-md mx-auto mt-10 p-8 bg-white shadow-lg rounded-2xl space-y-6"
+  onSubmit={handleSubmit}
+>
+  
+
+  <div>
+    <label
+      htmlFor="email"
+      className="block mb-2 text-sm font-medium text-gray-700"
+    >
+      Adresse e-mail
+    </label>
+    <input
+      type="email"
+      id="email"
+      placeholder="nom@exemple.com"
+      required
+      onChange={(e) => setEmail(e.target.value)}
+      className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+    />
+  </div>
+
+  <div>
+    <label
+      htmlFor="password"
+      className="block mb-2 text-sm font-medium text-gray-700"
+    >
+      Mot de passe
+    </label>
+    <input
+      type="password"
+      id="password"
+      required
+      onChange={(e) => setPassword(e.target.value)}
+      className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+    />
+    <div className="text-right mt-2">
+      <Link
+        to="/forgot-password"
+        className="text-sm text-green-600 hover:underline"
+      >
+        Mot de passe oublié ?
+      </Link>
+    </div>
+  </div>
+
+  <button
+    type="submit"
+    className="w-full flex justify-center items-center gap-2 px-5 py-3 text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg shadow-md transition duration-200"
+  >
+    Se connecter
+    <svg
+      className="w-5 h-5"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  </button>
+</form>
           {loading && (
             <Riple color="#32cd32" size="medium" text="" textColor="" />
           )}

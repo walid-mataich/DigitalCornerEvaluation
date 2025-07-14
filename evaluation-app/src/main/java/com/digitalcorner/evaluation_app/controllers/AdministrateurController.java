@@ -1,18 +1,29 @@
 package com.digitalcorner.evaluation_app.controllers;
 
 
+import com.digitalcorner.evaluation_app.dto.MailBody;
 import com.digitalcorner.evaluation_app.dto.RequestResponse;
 import com.digitalcorner.evaluation_app.entities.Administrateur;
+import com.digitalcorner.evaluation_app.entities.ForgotPassword;
 import com.digitalcorner.evaluation_app.entities.VilleCentre;
+import com.digitalcorner.evaluation_app.repositories.AdministrateurRepository;
+import com.digitalcorner.evaluation_app.repositories.ForgotPasswordRepository;
 import com.digitalcorner.evaluation_app.repositories.VilleCentreRepository;
 import com.digitalcorner.evaluation_app.services.AdministrateurService;
+import com.digitalcorner.evaluation_app.services.MailService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
+import java.util.Random;
 
 @RestController
 public class AdministrateurController {
@@ -21,6 +32,15 @@ public class AdministrateurController {
 
     @Autowired
     private VilleCentreRepository villeCentreRepository;
+
+    @Autowired
+    private AdministrateurRepository administrateurRepository;
+
+    @Autowired
+    private ForgotPasswordRepository forgotPasswordRepository;
+
+    @Autowired
+    private MailService mailService;
 
     @PostMapping("/auth/register/{centreId}")
     public ResponseEntity<RequestResponse> register(@RequestBody RequestResponse reg, @PathVariable Long centreId) {
@@ -71,4 +91,26 @@ public class AdministrateurController {
     public ResponseEntity<RequestResponse> deleteUSer(@PathVariable Long userId){
         return ResponseEntity.ok(administrateurService.deleteAdmin(userId));
     }
+
+
+
+
+    @PostMapping("/auth/forgotpassword/verifyMail/{email}")
+    public ResponseEntity<String> verifyMail(@PathVariable String email){
+        return administrateurService.verifyEmail(email);
+    }
+
+
+    @PostMapping("/auth/forgotpassword/verifyOTP/{otp}/{email}")
+    public ResponseEntity<String> verifyOTP(@PathVariable Integer otp, @PathVariable String email){
+        return administrateurService.verifyOTP(otp,email);
+    }
+
+
+    @PostMapping("/auth/forgotpassword/modifyPassword/{email}/{newPassword}")
+    public ResponseEntity<String> modifyPassword(@PathVariable String email,@PathVariable String newPassword){
+        return administrateurService.modifyPassword(newPassword, email);
+    }
+
+
 }

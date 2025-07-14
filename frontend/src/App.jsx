@@ -18,6 +18,7 @@ import ChooseCenter from "./pages/ChooseCenter";
 import CentrePage from "./pages/CentrePage";
 import AdministrateursListe from "./pages/AdministrateursListe";
 import AjouterAdmin from "./pages/AjouterAdmin";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   const router = createBrowserRouter(
@@ -29,6 +30,7 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/evaluation" element={<ChooseCenter />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
           <Route path="/admin">

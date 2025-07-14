@@ -58,27 +58,26 @@ const SuperAdminDashboard = () => {
               />
             </div>
 
-            <div className="flex col-span-1 sm:col-span-2 lg:col-span-6 pl-4 ">
-              
-                <h2 className="text-lg font-semibold text-green-700 text-left">
-                  Taux de satisfaction pour ce mois
-                </h2>
-                <button className="flex items-center text-center rounded-md  mx-9 cursor-pointer border border-green-600 py-1 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-green-600 hover:text-white hover:bg-green-600 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
-              Afficher plus
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-4 h-4 ml-1.5"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-              
+            <div className="flex flex-col sm:flex-row  sm:items-center gap-4 col-span-1 sm:col-span-2 lg:col-span-6 pl-4">
+              <h2 className="text-lg font-semibold text-green-700 text-left">
+                Taux de satisfaction pour ce mois
+              </h2>
+
+              <button className="flex items-center text-center rounded-md cursor-pointer border border-green-600 py-1 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-green-600 hover:text-white hover:bg-green-600 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+                Afficher plus
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-4 h-4 ml-1.5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.72 7.72a.75.75 0 0 1 1.06 0l3.75 3.75a.75.75 0 0 1 0 1.06l-3.75 3.75a.75.75 0 1 1-1.06-1.06l2.47-2.47H3a.75.75 0 0 1 0-1.5h16.19l-2.47-2.47a.75.75 0 0 1 0-1.06Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
             </div>
 
             {centersData.slice(0, 3).map((center, index) => (
@@ -90,8 +89,6 @@ const SuperAdminDashboard = () => {
               </div>
             ))}
           </div>
-
-          
         </>
       ) : (
         <div className="fixed inset-0 bg-white bg-opacity-70 z-50 flex items-center justify-center">
