@@ -22,13 +22,15 @@ public class EvaluationService {
         this.villeCentreRepository = villeCentreRepository;
     }
 
-    public void addEvaluation(String Avis,Long idCentre){
+    public void addEvaluation(String Avis,Long idCentre, String type, String comment){
         Evaluation newEvaluation = new Evaluation();
         Optional<VilleCentre> optionalVilleCentre = villeCentreRepository.findById(idCentre);
 
         if(optionalVilleCentre.isPresent()){
             VilleCentre villeCentre = optionalVilleCentre.get();
             newEvaluation.setAvis(Avis);
+            newEvaluation.setType(type);
+            newEvaluation.setComment(comment);
             newEvaluation.setVilleCentre(villeCentre);
             evaluationRepository.save(newEvaluation);
             System.out.println("evaluation enregistre avec succes");

@@ -14,7 +14,7 @@ function Form() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   setLoading(true);
+    setLoading(true);
 
     try {
       const userData = await UserService.login(email, password);
@@ -22,6 +22,10 @@ function Form() {
       if (userData.token) {
         localStorage.setItem("TOKEN", userData.token);
         localStorage.setItem("ROLE", userData.role);
+        if (userData.idCentre) {
+          console.log("ID_CENTRE", userData.idCentre);
+          localStorage.setItem("ID_CENTRE", userData.idCentre);
+        }
         userData.role == "ADMIN"
           ? navigate("/admin/dashboard")
           : userData.role == "SUPERADMIN"
@@ -53,71 +57,69 @@ function Form() {
           </p>
 
           <form
-  className="max-w-md mx-auto mt-10 p-8 bg-white shadow-lg rounded-2xl space-y-6"
-  onSubmit={handleSubmit}
->
-  
+            className="max-w-md mx-auto mt-10 p-8 bg-white shadow-lg rounded-2xl space-y-6"
+            onSubmit={handleSubmit}
+          >
+            <div>
+              <label
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-gray-700"
+              >
+                Adresse e-mail
+              </label>
+              <input
+                type="email"
+                id="email"
+                placeholder="nom@exemple.com"
+                required
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              />
+            </div>
 
-  <div>
-    <label
-      htmlFor="email"
-      className="block mb-2 text-sm font-medium text-gray-700"
-    >
-      Adresse e-mail
-    </label>
-    <input
-      type="email"
-      id="email"
-      placeholder="nom@exemple.com"
-      required
-      onChange={(e) => setEmail(e.target.value)}
-      className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-    />
-  </div>
+            <div>
+              <label
+                htmlFor="password"
+                className="block mb-2 text-sm font-medium text-gray-700"
+              >
+                Mot de passe
+              </label>
+              <input
+                type="password"
+                id="password"
+                required
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              />
+              <div className="text-right mt-2">
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-green-600 hover:underline"
+                >
+                  Mot de passe oublié ?
+                </Link>
+              </div>
+            </div>
 
-  <div>
-    <label
-      htmlFor="password"
-      className="block mb-2 text-sm font-medium text-gray-700"
-    >
-      Mot de passe
-    </label>
-    <input
-      type="password"
-      id="password"
-      required
-      onChange={(e) => setPassword(e.target.value)}
-      className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
-    />
-    <div className="text-right mt-2">
-      <Link
-        to="/forgot-password"
-        className="text-sm text-green-600 hover:underline"
-      >
-        Mot de passe oublié ?
-      </Link>
-    </div>
-  </div>
-
-  <button
-    type="submit"
-    className="w-full flex justify-center items-center gap-2 px-5 py-3 text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg shadow-md transition duration-200"
-  >
-    Se connecter
-    <svg
-      className="w-5 h-5"
-      fill="currentColor"
-      viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        fillRule="evenodd"
-        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-        clipRule="evenodd"
-      />
-    </svg>
-  </button>
-</form>
+            <button
+              type="submit"
+              className="w-full flex justify-center items-center gap-2 px-5 py-3 text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg shadow-md transition duration-200"
+            >
+              Se connecter
+              <svg
+                className="w-5 h-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </form>
           {loading && (
             <Riple color="#32cd32" size="medium" text="" textColor="" />
           )}

@@ -40,7 +40,6 @@ public class Administrateur implements UserDetails {
     }
 
     @ManyToOne
-    @JsonIgnore
     private  VilleCentre villeCentre;
 
     @OneToOne(mappedBy = "administrateur",cascade = CascadeType.ALL , orphanRemoval = true)

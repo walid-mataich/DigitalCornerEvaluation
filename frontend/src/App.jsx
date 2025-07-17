@@ -30,13 +30,14 @@ function App() {
         <Route path="/avis" element={<EmplyeHome />} />
         <Route path="/test" element={<Test />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route path="/evaluation" element={<ChooseCenter />} />
-        <Route path="/evaluation/:codeCentre" element={<Evaluation />} />
+        {/* <Route path="/evaluation" element={<ChooseCenter />} /> */}
+
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
           <Route path="/admin">
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="evaluation" element={<Evaluation />} />
           </Route>
         </Route>
 

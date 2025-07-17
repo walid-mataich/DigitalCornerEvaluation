@@ -79,6 +79,10 @@ public class AdministrateurService {
             var refreshToken = jwtUtils.generteRefreshToken(new HashMap<>(),admin);
             requestResponse.setStatusCode(200);
             requestResponse.setToken(jwt);
+            if (admin.getRole().equals(Administrateur.Role.ADMIN)) {
+                requestResponse.setIdCentre(admin.getVilleCentre().getIdCentre());
+            }
+
             requestResponse.setRole(admin.getRole().name());
             requestResponse.setRefreshToken(refreshToken);
             requestResponse.setExpirationTime("24Hrs");

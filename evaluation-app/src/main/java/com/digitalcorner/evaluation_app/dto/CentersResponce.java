@@ -12,6 +12,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CentersResponce {
     private int total;
-    private Map<Integer, Map<String,MonthlyAvis>> TotalMonthlyAvis;
+    private Map<Integer, Map<String,MonthlyAvis>> generalTotalMonthlyAvis;
+    private Map<String, Map<Integer, Map<String,MonthlyAvis>>> totalMonthlyAvisByType;
 }
 

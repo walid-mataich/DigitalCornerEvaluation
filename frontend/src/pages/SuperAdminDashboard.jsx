@@ -27,12 +27,49 @@ const SuperAdminDashboard = () => {
     fetchCentresData();
   }, [token]);
 
-  const buildChartData = (center) => [
-    { name: "Très satisfait", value: center.tresSatisfaitNb },
-    { name: "Satisfait", value: center.satisfaitNb },
-    { name: "Pas satisfait", value: center.peuSatisfaitNb },
-    { name: "Pas satisfait du tout", value: center.pasDuToutSatisfaitNb },
-  ];
+  const buildChartData = (center) => {
+    const now = new Date();
+    const currentYear = now.getFullYear().toString();
+
+    const monthNames = [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre",
+    ];
+
+    const currentMonthName = monthNames[now.getMonth()]; // e.g., "juillet"
+
+    const monthlyData = center.yearlyMonthly?.[currentYear]?.[currentMonthName];
+
+    if (!monthlyData) {
+      // Fallback to 0s if no data for this month
+      return [
+        { name: "Très satisfait", value: 0 },
+        { name: "Satisfait", value: 0 },
+        { name: "Peu satisfait", value: 0 },
+        { name: "Pas du tout satisfait", value: 0 },
+      ];
+    }
+
+    return [
+      { name: "Très satisfait", value: monthlyData.tresSatisfaitNb },
+      { name: "Satisfait", value: monthlyData.satisfaitNb },
+      { name: "Pas satisfait", value: monthlyData.peuSatisfaitNb },
+      {
+        name: "Pas satisfait du tout",
+        value: monthlyData.pasDuToutSatisfaitNb,
+      },
+    ];
+  };
 
   return (
     <>

@@ -8,16 +8,31 @@ import Chart from "react-apexcharts";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import api from "../api/axios";
-
-
 const monthOrder = [
-  "janvier", "février", "mars", "avril", "mai", "juin", "juillet",
-  "août", "septembre", "octobre", "novembre", "décembre"
+  "janvier",
+  "février",
+  "mars",
+  "avril",
+  "mai",
+  "juin",
+  "juillet",
+  "août",
+  "septembre",
+  "octobre",
+  "novembre",
+  "décembre",
 ];
 
+function getSatisfactionChartData(apiData, selectedYear, selectedType) {
+  if (!apiData) return { categories: [], data: [] };
 
-function getSatisfactionChartData(apiData, selectedYear) {
-  const monthlyData = apiData?.totalMonthlyAvis[selectedYear] || {};
+  let monthlyData = {};
+  if (selectedType === "Genéral") {
+    monthlyData = apiData.generalTotalMonthlyAvis?.[selectedYear] || {};
+  } else {
+    monthlyData = apiData.totalMonthlyAvisByType?.[selectedType]?.[selectedYear] || {};
+  }
+
   const sortedMonths = monthOrder.filter((month) => monthlyData[month]);
 
   const categories = [];
@@ -25,10 +40,10 @@ function getSatisfactionChartData(apiData, selectedYear) {
 
   sortedMonths.forEach((month) => {
     const info = monthlyData[month];
-    const total = info.total;
-    const satisfied = info.satisfaitNb + info.tresSatisfaitNb;
+    const total = info.total || 0;
+    const satisfied = (info.satisfaitNb || 0) + (info.tresSatisfaitNb || 0);
     const percentage = total === 0 ? 0 : Math.round((satisfied / total) * 100);
-    categories.push(month.charAt(0).toUpperCase() + month.slice(1)); 
+    categories.push(month.charAt(0).toUpperCase() + month.slice(1));
     data.push(percentage);
   });
 
@@ -37,12 +52,12 @@ function getSatisfactionChartData(apiData, selectedYear) {
 
 export default function CenterChart() {
   const [selectedYear, setSelectedYear] = useState("2025");
+  const [selectedType, setSelectedType] = useState("Genéral");
   const [apiData, setApiData] = useState(null);
   const [token] = useState(localStorage.getItem("TOKEN"));
 
-  
   useEffect(() => {
-   const fetchCentresData = async () => {
+    const fetchCentresData = async () => {
       try {
         const res = await api.get("/superadmin/centres/total", {
           headers: {
@@ -56,9 +71,9 @@ export default function CenterChart() {
       }
     };
     fetchCentresData();
-  }, []);
+  }, [token]);
 
-  const chartData = getSatisfactionChartData(apiData, selectedYear);
+  const chartData = getSatisfactionChartData(apiData, selectedYear, selectedType);
 
   const chartConfig = {
     type: "bar",
@@ -70,17 +85,10 @@ export default function CenterChart() {
       },
     ],
     options: {
-      chart: {
-        toolbar: { show: false },
-      },
+      chart: { toolbar: { show: false } },
       dataLabels: { enabled: false },
       colors: ["#228324"],
-      plotOptions: {
-        bar: {
-          columnWidth: "40%",
-          borderRadius: 4,
-        },
-      },
+      plotOptions: { bar: { columnWidth: "40%", borderRadius: 4 } },
       xaxis: {
         categories: chartData.categories,
         labels: {
@@ -112,9 +120,7 @@ export default function CenterChart() {
       fill: { opacity: 0.8 },
       tooltip: {
         theme: "dark",
-        y: {
-          formatter: (val) => `${val}%`,
-        },
+        y: { formatter: (val) => `${val}%` },
       },
     },
   };
@@ -141,14 +147,35 @@ export default function CenterChart() {
           </div>
         </div>
 
-        {/* Dropdown Année */}
+        
+        <select
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+          className="border border-green-600 text-green-800 rounded-md mr-5 py-1 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+        >
+          <option value="Genéral">Général</option>
+          {apiData &&
+            Object.keys(apiData.totalMonthlyAvisByType).map((type) => (
+              <option key={type} value={type}>
+                {type === "tempsDeReponse"
+                  ? "Temps de réponse"
+                  : type === "comportement"
+                  ? "Comportement"
+                  : type === "qualiteDeLaSolution"
+                  ? "Qualité de la solution"
+                  : type}
+              </option>
+            ))}
+        </select>
+
+        
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
           className="border border-green-600 text-green-800 rounded-md mr-5 py-1 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
         >
           {apiData &&
-            Object.keys(apiData.totalMonthlyAvis).map((year) => (
+            Object.keys(apiData.generalTotalMonthlyAvis).map((year) => (
               <option key={year} value={year}>
                 {year}
               </option>

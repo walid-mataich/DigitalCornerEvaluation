@@ -24,6 +24,7 @@ public class RequestResponse {
     private String prenom;
     private String password;
     private String role;
+    private Long idCentre;
     private Administrateur administrateur;
     private VilleCentre villeCentre;
     private List<Administrateur> adminList;

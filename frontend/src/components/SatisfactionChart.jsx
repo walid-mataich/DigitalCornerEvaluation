@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { MdOutlinePlace } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const COLORS = ["#4ade80", "#22c55e", "#facc15", "#ef4444"];
 
@@ -16,9 +17,9 @@ const SatisfactionChart = ({ data, centerName }) => {
     <div className="bg-white  rounded-2xl shadow-md p-6 w-full max-w-md mx-auto">
       <div className="flex items-center gap-2  ">
         <MdOutlinePlace className="text-2xl text-gray-700" />
-        <h2 className="text-xl  font-semibold   text-gray-700">
+        <Link to={"/"} className="text-xl  font-semibold   text-gray-700">
           {centerName}
-        </h2>
+        </Link>
       </div>
 
       <div className="h-40">

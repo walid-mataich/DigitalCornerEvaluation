@@ -34,7 +34,7 @@ class UserService {
 
   static async getYourProfile(token) {
     try {
-      const response = await api.get(`/superadmin/get-profile`, {
+      const response = await api.get(`/adminsuperadmin/get-profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;

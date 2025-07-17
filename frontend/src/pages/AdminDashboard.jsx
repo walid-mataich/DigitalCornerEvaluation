@@ -1,9 +1,10 @@
 import React from 'react'
+import DashboardNavbar from '../components/DashboardNavbar'
 
 const AdminDashboard = () => {
   return (
     <div>
-     Admindashboard
+     <DashboardNavbar/>
     </div>
   )
 }

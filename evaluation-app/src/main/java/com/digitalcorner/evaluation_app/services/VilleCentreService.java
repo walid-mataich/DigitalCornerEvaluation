@@ -44,9 +44,10 @@ public class VilleCentreService {
             int tresSatisfaitNb = 0;
             Map<Integer, Map<String, MonthlyAvis>> yearlyMonthly = new HashMap<>();
 
-            CentreResponse centreRequest = new CentreResponse();
-            centreRequest.setVilleCentreId(centre.getIdCentre());
-            centreRequest.setVilleCentreNom(centre.getNomCentre());
+            CentreResponse centreResponse = new CentreResponse();
+            centreResponse.setVilleCentreId(centre.getIdCentre());
+            centreResponse.setVilleCentreNom(centre.getNomCentre());
+            centreResponse.setEvaluations(centre.getEvaluations());
 
             for (Evaluation evaluation : centre.getEvaluations()) {
                 LocalDate date = evaluation.getDate();
@@ -80,19 +81,19 @@ public class VilleCentreService {
 
 
 
-            centreRequest.setSatisfaitNb(satisfaitNb);
-            centreRequest.setTresSatisfaitNb(tresSatisfaitNb);
-            centreRequest.setPeuSatisfaitNb(peuSatisfaitNb);
-            centreRequest.setPasDuToutSatisfaitNb(pasDuToutSatisfaitNb);
-            centreRequest.setYearlyMonthly(yearlyMonthly);
+            centreResponse.setSatisfaitNb(satisfaitNb);
+            centreResponse.setTresSatisfaitNb(tresSatisfaitNb);
+            centreResponse.setPeuSatisfaitNb(peuSatisfaitNb);
+            centreResponse.setPasDuToutSatisfaitNb(pasDuToutSatisfaitNb);
+            centreResponse.setYearlyMonthly(yearlyMonthly);
 
 
 
-            result.add(centreRequest);
+            result.add(centreResponse);
         }
 
 
-        result.sort((a,b) -> Float.compare((float)b.getPasDuToutSatisfaitNb()/(b.getPasDuToutSatisfaitNb()+b.getPeuSatisfaitNb()+b.getSatisfaitNb()+b.getTresSatisfaitNb()),(float) a.getPasDuToutSatisfaitNb()/(a.getPasDuToutSatisfaitNb()+a.getPeuSatisfaitNb()+a.getSatisfaitNb()+a.getTresSatisfaitNb())));
+        result.sort((a,b) -> Float.compare((float)(b.getPasDuToutSatisfaitNb()+ b.getPeuSatisfaitNb())/(b.getPasDuToutSatisfaitNb()+b.getPeuSatisfaitNb()+b.getSatisfaitNb()+b.getTresSatisfaitNb()),(float) (a.getPasDuToutSatisfaitNb() + a.getPeuSatisfaitNb())/(a.getPasDuToutSatisfaitNb()+a.getPeuSatisfaitNb()+a.getSatisfaitNb()+a.getTresSatisfaitNb())));
 return result;
     }
 
@@ -110,6 +111,7 @@ return result;
 
         CentersResponce allCentersResponce = new CentersResponce();
         Map<Integer, Map<String,MonthlyAvis>> totalYearlyMonthlyAvis = new HashMap<>();
+        Map<String, Map<Integer, Map<String, MonthlyAvis>>> totalMonthlyAvisByType = new HashMap<>();
 
         for (Evaluation evaluation : allEvaluations) {
             LocalDate date = evaluation.getDate();
@@ -120,27 +122,38 @@ return result;
             monthlyMap.putIfAbsent(month, new MonthlyAvis());
 
             MonthlyAvis monthly  = monthlyMap.get(month);
-            monthly.setTotal(monthly.getTotal() + 1);
-            if (evaluation.getAvis().equals("satisfait")){
+            incrementAvis(monthly, evaluation.getAvis());
 
-                monthly.setSatisfaitNb(monthly.getSatisfaitNb() + 1);
-            }else if (evaluation.getAvis().equals("tres satisfait")){
+            String type = evaluation.getType();
+            totalMonthlyAvisByType.putIfAbsent(type, new HashMap<>());
+            Map<Integer, Map<String, MonthlyAvis>> typeMap = totalMonthlyAvisByType.get(type);
+            typeMap.putIfAbsent(year, new HashMap<>());
+            Map<String, MonthlyAvis> typeMonthlyMap = typeMap.get(year);
+            typeMonthlyMap.putIfAbsent(month, new MonthlyAvis());
 
-                monthly.setTresSatisfaitNb(monthly.getTresSatisfaitNb() + 1);
-            }else if (evaluation.getAvis().equals("peu satisfait")){
-
-                monthly.setPeuSatisfaitNb(monthly.getPeuSatisfaitNb()+ 1);
-            }else if (evaluation.getAvis().equals("pas du tout satisfait")){
-
-                monthly.setPasDuToutSatisfaitNb(monthly.getPasDuToutSatisfaitNb() + 1);
-            }
-
-            allCentersResponce.setTotalMonthlyAvis(totalYearlyMonthlyAvis);
+            MonthlyAvis monthlyByType = totalMonthlyAvisByType.get(type).get(year).get(month);
+            incrementAvis(monthlyByType, evaluation.getAvis());
 
 
         }
 
+        allCentersResponce.setGeneralTotalMonthlyAvis(totalYearlyMonthlyAvis);
+        allCentersResponce.setTotalMonthlyAvisByType(totalMonthlyAvisByType);
+
 
         return allCentersResponce;
     }
+
+
+    private void incrementAvis(MonthlyAvis monthly, String avis) {
+        monthly.setTotal(monthly.getTotal() + 1);
+
+        switch (avis.toLowerCase()) {
+            case "satisfait" -> monthly.setSatisfaitNb(monthly.getSatisfaitNb() + 1);
+            case "tres satisfait" -> monthly.setTresSatisfaitNb(monthly.getTresSatisfaitNb() + 1);
+            case "peu satisfait" -> monthly.setPeuSatisfaitNb(monthly.getPeuSatisfaitNb() + 1);
+            case "pas du tout satisfait" -> monthly.setPasDuToutSatisfaitNb(monthly.getPasDuToutSatisfaitNb() + 1);
+        }
+    }
+
 }

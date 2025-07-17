@@ -18,9 +18,9 @@ public class EvaluationController {
     }
 
 //    api to add evaluations : st3mlo hakka : expl: http://localhost:8080/api/evaluations/add?idCentre=1&avis="tres satisfais"
-    @PostMapping("/superadmin/evaluations/add")
-    public void addEvaluation(@RequestParam Long idCentre, @RequestParam String avis) {
-        evaluationService.addEvaluation(avis, idCentre);
+    @PostMapping("/adminsuperadmin/evaluations/add")
+    public void addEvaluation(@RequestParam Long idCentre, @RequestParam String avis, @RequestParam String type, @RequestParam String comment) {
+        evaluationService.addEvaluation(avis, idCentre, type, comment);
     }
 
     // api to delete evaluation

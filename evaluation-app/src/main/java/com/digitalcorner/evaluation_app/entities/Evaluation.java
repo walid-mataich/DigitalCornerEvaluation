@@ -28,6 +28,11 @@ public class Evaluation {
     private String Avis;
 
 
+    private String Type;
+
+    private String comment;
+
+
 
     @ManyToOne
     @JsonBackReference
