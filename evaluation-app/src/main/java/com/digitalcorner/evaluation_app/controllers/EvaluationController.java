@@ -1,6 +1,7 @@
 package com.digitalcorner.evaluation_app.controllers;
 
 
+import com.digitalcorner.evaluation_app.dto.EvaluationsDataResponse;
 import com.digitalcorner.evaluation_app.entities.Evaluation;
 import com.digitalcorner.evaluation_app.services.EvaluationService;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,11 @@ public class EvaluationController {
     @GetMapping("/superadmin/evaluations")
     public List<Evaluation> getEvaluations() {
         return evaluationService.getEvaluations();
+    }
+
+    @GetMapping("/superadmin/evaluationswithcomments")
+    public List<EvaluationsDataResponse> getEvaluationsWithComments() {
+        return evaluationService.getEvaluationsHavingComment();
     }
 
 }

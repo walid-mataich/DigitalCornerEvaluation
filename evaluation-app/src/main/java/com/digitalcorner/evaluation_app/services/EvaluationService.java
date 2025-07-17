@@ -1,6 +1,7 @@
 package com.digitalcorner.evaluation_app.services;
 
 
+import com.digitalcorner.evaluation_app.dto.EvaluationsDataResponse;
 import com.digitalcorner.evaluation_app.entities.Evaluation;
 import com.digitalcorner.evaluation_app.entities.VilleCentre;
 import com.digitalcorner.evaluation_app.repositories.EvaluationRepository;
@@ -8,6 +9,7 @@ import com.digitalcorner.evaluation_app.repositories.VilleCentreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +63,32 @@ public class EvaluationService {
 
     public List<Evaluation> getEvaluations(){
         return evaluationRepository.findAll();
+    }
+
+    public List<EvaluationsDataResponse> getEvaluationsHavingComment(){
+        List<Evaluation> evaluations = getEvaluations();
+
+        List<EvaluationsDataResponse> result = new ArrayList<>();
+        for (Evaluation evaluation : evaluations) {
+            if(evaluation.getComment() != null){
+                EvaluationsDataResponse evaluationsDataResponse = new EvaluationsDataResponse();
+                evaluationsDataResponse.setNomCentre(evaluation.getVilleCentre().getNomCentre());
+                evaluationsDataResponse.setDate(evaluation.getDate());
+                evaluationsDataResponse.setCommentaire(evaluation.getComment());
+                evaluationsDataResponse.setType(evaluation.getType());
+                if(evaluation.getAvis().equals("tres satisfait")){
+                    evaluationsDataResponse.setAvis("trés satisfait");
+                }else {
+                    evaluationsDataResponse.setAvis(evaluation.getAvis());
+                }
+                evaluationsDataResponse.setIdCentre(evaluation.getVilleCentre().getIdCentre());
+                result.add(evaluationsDataResponse);
+
+            }
+        }
+
+        return result;
+
     }
 
 

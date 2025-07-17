@@ -1,0 +1,121 @@
+import { useState, useEffect } from "react";
+import { FaEnvelope, FaEdit, FaKey, FaSignOutAlt } from "react-icons/fa";
+import api from "../api/axios";
+import DashboardNavbar from "../components/DashboardNavbar";
+
+const Profile = () => {
+  const [administrateur, setAdministrateur] = useState(null);
+  const [token] = useState(localStorage.getItem("TOKEN"));
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const response = await api.get("/adminsuperadmin/get-profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("Profil administrateur récupéré :", response.data);
+        setAdministrateur(response.data.administrateur);
+      } catch (error) {
+        console.error("Erreur lors de la récupération du profil :", error);
+        setAdministrateur(null);
+      }
+    };
+    fetchProfileData();
+  }, [token]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("TOKEN");
+    localStorage.removeItem("ROLE");
+    window.location.href = "/login"; // Redirige vers la page de connexion
+  };
+
+  if (!administrateur) return null;
+
+  return (
+    <>
+      <DashboardNavbar />
+      <div className="min-h-[calc(100vh-5rem)] pt-6 bg-gray-100 flex items-center justify-center">
+        <div className="bg-white shadow-lg rounded-2xl w-full max-w-3xl p-6 m-auto">
+          {/* Header modifié avec avatar et statut */}
+          <div className="flex items-center space-x-6 border-b pb-6">
+            <div className="h-20 w-20 rounded-full bg-green-600 flex items-center justify-center text-white text-xl font-bold">
+              {administrateur.nom.charAt(0)}
+              {administrateur.prenom.charAt(0)}
+            </div>
+            <div className="flex-1">
+              <h2 className="text-2xl font-semibold text-gray-800">
+                {`${administrateur.nom} ${administrateur.prenom}`}
+              </h2>
+              <p className="text-sm text-gray-500">{administrateur.email}</p>
+              <span className="inline-block mt-2 px-3 py-1 text-xs font-semibold text-white bg-green-500 rounded-full">
+                {administrateur.role}
+              </span>
+            </div>
+            <span
+              className={`px-3 py-1 text-sm rounded-full flex-shrink-0 ${
+                administrateur.enabled
+                  ? "bg-green-100 text-green-600"
+                  : "bg-red-100 text-red-600"
+              }`}
+            >
+              {administrateur.enabled ? "Actif" : "Inactif"}
+            </span>
+          </div>
+
+          {/* Corps du profil */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div>
+              <label className="text-gray-500 text-sm">Nom</label>
+              <p className="text-lg font-medium">{administrateur.nom}</p>
+            </div>
+            <div>
+              <label className="text-gray-500 text-sm">Prénom</label>
+              <p className="text-lg font-medium">{administrateur.prenom}</p>
+            </div>
+            <div>
+              <label className="text-gray-500 text-sm">Email</label>
+              <p className="text-lg font-medium flex items-center gap-2">
+                <FaEnvelope /> {administrateur.email}
+              </p>
+            </div>
+            <div>
+              <label className="text-gray-500 text-sm">Rôle</label>
+              <p className="text-lg font-medium text-blue-700">
+                {administrateur.role}
+              </p>
+            </div>
+
+            {administrateur.villeCentre && (
+              <div>
+                <label className="text-gray-500 text-sm">Ville / Centre</label>
+                <p className="text-lg font-medium">
+                  {administrateur.villeCentre}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="mt-8 flex gap-4 flex-wrap">
+            <button className="border border-blue-600 hover:bg-blue-600 hover:text-white text-blue-600 cursor-pointer px-4 py-2 rounded-lg flex items-center gap-2">
+              <FaEdit /> Modifier
+            </button>
+            <button className="border border-yellow-500 hover:bg-yellow-600 text-yellow-600 cursor-pointer hover:text-white px-4 py-2 rounded-lg flex items-center gap-2">
+              <FaKey /> Changer le mot de passe
+            </button>
+            <button
+              onClick={handleLogout}
+              className="cursor-pointer bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 ml-auto"
+            >
+              <FaSignOutAlt /> Déconnexion
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Profile;

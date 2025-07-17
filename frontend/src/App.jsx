@@ -20,6 +20,8 @@ import AdministrateursListe from "./pages/AdministrateursListe";
 import AjouterAdmin from "./pages/AjouterAdmin";
 import ForgotPassword from "./pages/ForgotPassword";
 import Evaluation from "./pages/Evaluation";
+import EvaluationsWithComments from "./pages/EvaluationsWithComments";
+import Profile from "./pages/Profile";
 
 function App() {
   const router = createBrowserRouter(
@@ -38,6 +40,7 @@ function App() {
           <Route path="/admin">
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="evaluation" element={<Evaluation />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
         </Route>
 
@@ -46,7 +49,9 @@ function App() {
             <Route path="dashboard" element={<SuperAdminDashboard />} />
             <Route path="administrateurs" element={<AdministrateursListe />} />
             <Route path="newadmin" element={<AjouterAdmin />} />
+            <Route path="feedback" element={<EvaluationsWithComments />} />
             <Route path="centres" element={<CentrePage />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
         </Route>
       </>
