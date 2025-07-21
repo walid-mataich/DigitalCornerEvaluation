@@ -1,104 +1,138 @@
-import React, { useEffect, useState } from 'react'
-import DashboardNavbar from '../components/DashboardNavbar'
-import api from '../api/axios';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import DashboardNavbar from "../components/DashboardNavbar";
+import api from "../api/axios";
+import { Link } from "react-router-dom";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
-function AdministrateursListe() {
-    const [administrateurs, setAdministrateurs] = useState([]);
-    const token = localStorage.getItem("TOKEN");
-    
-    useEffect(() => {
-        const fetchAdministrateur = async () =>{
-            try {
-                const res = await api.get("/superadmin/get-all-users",{
-                    headers:{
-                        Authorization: `Bearer ${token}`,
-                    }
-                });
-                const { adminList = [] } = res.data;
-                console.log(res.data);
-                setAdministrateurs(adminList)
-                
-            } catch (error) {
-                console.error("Affichage des administrateurs", error.message);
-            }
-        }   
-        
-         if (token) {
-            fetchAdministrateur();
-         }
-    },[token])
+/**
+ * Composant affichant la liste des administrateurs
+ */
+const AdministrateursListe = () => {
+  const [administrateurs, setAdministrateurs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = localStorage.getItem("TOKEN");
+
+  /**
+   * Récupère la liste des administrateurs depuis l'API
+   */
+  const fetchAdministrateurs = async () => {
+    if (!token) {
+      setError("Aucun token d'authentification trouvé.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await api.get("/superadmin/get-all-users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { adminList = [] } = response.data;
+      setAdministrateurs(adminList);
+    } catch (err) {
+      console.error("Erreur lors de la récupération des administrateurs :", err);
+      setError("Impossible de charger la liste des administrateurs.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdministrateurs();
+  }, [token]);
+
   return (
-    <div>
-        <DashboardNavbar />
-        <div className="pt-28 flex justify-center px-4">
-        <div className="w-full max-w-5xl overflow-x-auto rounded-xl shadow-md ">
-          <div className="flex justify-end mb-4">
-           <Link to={"/general/newadmin"}>
-            <button className="px-4 py-2 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-lg shadow-md">
-              Ajouter un administrateur
-            </button></Link>
+    <div className="min-h-screen bg-gray-100">
+      <DashboardNavbar />
+
+      <div className="pt-28 px-4 flex justify-center">
+        <div className="w-full max-w-7xl bg-white rounded-xl shadow-md p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-green-700">
+              Liste des administrateurs
+            </h2>
+            <Link to="/general/newadmin">
+              <button className="cursor-pointer px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg shadow transition-colors duration-200">
+                + Ajouter un administrateur
+              </button>
+            </Link>
           </div>
 
-          <table className="min-w-full border border-green-200 bg-white rounded-xl overflow-hidden">
-            <thead className="bg-green-50 dark:bg-green-800">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-bold text-green-600 uppercase tracking-wider">
-                  nom
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-green-600 uppercase tracking-wider">
-                  prenom
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-green-600 uppercase tracking-wider">
-                  email
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-bold text-green-600 uppercase tracking-wider">
-                  centre
-                </th>
-                <th className="px-6 py-3 text-center text-xs font-bold text-green-600 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-green-200">
-              {administrateurs.length > 0 ? (
-                administrateurs.map((a) => (
-                  <tr key={a.idAdministrateur} className="hover:bg-green-50 transition">
-                    <td className="px-6 py-4 text-green-700 font-medium whitespace-nowrap">
-                      {a.nom}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
-                      {a.prenom}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
-                      {a.email}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
-                         
-                    </td>
-                    <td className="px-6 py-4 text-center space-x-2">
-                      <button className="px-4 py-1 text-sm font-medium text-white bg-green-700 hover:bg-green-800 rounded-full">
-                        Modifier
-                      </button>
-                      <button className="px-4 py-1 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-full">
-                        Supprimer
-                      </button>
-                    </td>
+          {loading ? (
+            <div className="text-center py-6 text-gray-500">Chargement...</div>
+          ) : error ? (
+            <div className="text-center py-6 text-red-500">{error}</div>
+          ) : administrateurs.length === 0 ? (
+            <div className="text-center py-6 text-gray-500">
+              Aucun administrateur trouvé.
+            </div>
+          ) : (
+            <div className="overflow-x-auto rounded-lg border border-green-200">
+              <table className="min-w-full divide-y divide-green-200">
+                <thead className="bg-green-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-green-700 uppercase tracking-wider">
+                      Nom
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-green-700 uppercase tracking-wider">
+                      Prénom
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-green-700 uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-green-700 uppercase tracking-wider">
+                      Centre
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-semibold text-green-700 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="3" className="text-center py-4 text-gray-500">
-                    Aucun administrateur trouvé.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {administrateurs.map((admin) => (
+                    <tr
+                      key={admin.idAdministrateur}
+                      className="hover:bg-green-50 transition-colors duration-150"
+                    >
+                      <td className="px-6 py-4 font-medium text-gray-800 whitespace-nowrap">
+                        {admin.nom}
+                      </td>
+                      <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
+                        {admin.prenom}
+                      </td>
+                      <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
+                        {admin.email}
+                      </td>
+                      <td className="px-6 py-4 text-gray-500 italic whitespace-nowrap">
+                        {admin.villeCentre?.nomCentre || "Aucun centre"}
+                      </td>
+                      <td className="px-6 py-4 text-center whitespace-nowrap">
+                        <button
+                          className="cursor-pointer text-green-700 hover:text-green-900 mx-2 transition-colors duration-150"
+                          aria-label="Modifier"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          className="cursor-pointer text-red-600 hover:text-red-800 mx-2 transition-colors duration-150"
+                          aria-label="Supprimer"
+                        >
+                          <FaTrash />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdministrateursListe
+export default AdministrateursListe;

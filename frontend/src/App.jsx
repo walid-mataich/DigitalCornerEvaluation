@@ -22,6 +22,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Evaluation from "./pages/Evaluation";
 import EvaluationsWithComments from "./pages/EvaluationsWithComments";
 import Profile from "./pages/Profile";
+import ChangePassword from "./pages/ChangePassword";
+import AdminComments from "./pages/AdminComments";
 
 function App() {
   const router = createBrowserRouter(
@@ -40,7 +42,9 @@ function App() {
           <Route path="/admin">
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="evaluation" element={<Evaluation />} />
+            <Route path="feedback" element={<AdminComments />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="reset" element={<ChangePassword />} />
           </Route>
         </Route>
 
@@ -52,6 +56,7 @@ function App() {
             <Route path="feedback" element={<EvaluationsWithComments />} />
             <Route path="centres" element={<CentrePage />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="reset" element={<ChangePassword />} />
           </Route>
         </Route>
       </>

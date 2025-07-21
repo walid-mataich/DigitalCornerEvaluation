@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import { Riple } from "react-loading-indicators";
 import { Link } from "react-router-dom";
+import { HiExclamationCircle } from "react-icons/hi";
 
 function Form() {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ function Form() {
     setLoading(true);
 
     try {
+      setError("");
       const userData = await UserService.login(email, password);
       console.log(userData);
       if (userData.token) {
@@ -32,10 +34,14 @@ function Form() {
           ? navigate("/general/dashboard")
           : navigate("/login");
       } else {
-        setError(userData.message);
+        setError(userData.error);
+        setTimeout(() => {
+          setError("");
+        }, 7000);
       }
     } catch (error) {
       console.log(error);
+      console.error("Erreur lors de la connexion :", error);
       setError(error.message);
       setTimeout(() => {
         setError("");
@@ -120,6 +126,18 @@ function Form() {
               </svg>
             </button>
           </form>
+          {error && (
+            <div
+              className="mt-6 max-w-md mx-auto flex items-center gap-3 p-4 text-sm text-red-800 bg-red-100 border border-red-300 rounded-lg shadow-sm"
+              role="alert"
+            >
+              <HiExclamationCircle className="w-5 h-5 text-red-600" />
+              <span>
+                <strong className="font-semibold"></strong> {error}
+              </span>
+            </div>
+          )}
+
           {loading && (
             <Riple color="#32cd32" size="medium" text="" textColor="" />
           )}

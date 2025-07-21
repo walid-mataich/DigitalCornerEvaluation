@@ -1,15 +1,10 @@
-import React, { useEffect } from "react";
-import DashboardNavbar from "../components/DashboardNavbar";
-import CenterChart from "../components/Chart1";
-import { useState } from "react";
-import HeaderCard from "../components/HeaderCard";
-import MonthlyStats from "../components/MonthlyStats";
-import EvaluationTable from "../components/EvaluationTable";
+import React from "react";
+import EvaluationTableTotal from "../components/EvaluationTableTotal";
+import { useState, useEffect } from "react";
 import api from "../api/axios";
-import Chart2 from "../components/chart2";
-import SatisfactionChart2 from "../components/SatisfactionChart2";
+import DashboardNavbar from "../components/DashboardNavbar";
 
-const AdminDashboard = () => {
+const AdminComments = () => {
   const [data, setData] = useState(null);
   const idCentre = localStorage.getItem("ID_CENTRE");
 
@@ -21,9 +16,7 @@ const AdminDashboard = () => {
             Authorization: `Bearer ${localStorage.getItem("TOKEN")}`,
           },
         });
-
         console.log("Data fetched for center:", response.data[0]);
-
         setData(response.data[0]);
       } catch (error) {
         console.error(
@@ -45,25 +38,17 @@ const AdminDashboard = () => {
       </div>
     );
   }
-
   return (
-    <div>
+    <>
       <DashboardNavbar />
-
-      <div className="grid grid-cols-5 grid-rows-6 gap-x-4 gap-y-1">
-        <div className="col-span-3 row-span-3">
-          <Chart2 />
-        </div>
-        <div className="col-span-2 row-span-3 col-start-4">
-          <SatisfactionChart2 />
-        </div>
-        <div className="col-span-5 row-span-3 row-start-4">
+      <div className="min-h-screen  p-4 md:p-6">
+        <div className="max-w-8xl mx-auto space-y-8">
           {/* Recent Evaluations */}
-          <EvaluationTable evaluations={data.evaluations} />
+          <EvaluationTableTotal evaluations={data.evaluations} />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default AdminDashboard;
+export default AdminComments;

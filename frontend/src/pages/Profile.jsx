@@ -2,10 +2,13 @@ import { useState, useEffect } from "react";
 import { FaEnvelope, FaEdit, FaKey, FaSignOutAlt } from "react-icons/fa";
 import api from "../api/axios";
 import DashboardNavbar from "../components/DashboardNavbar";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [administrateur, setAdministrateur] = useState(null);
   const [token] = useState(localStorage.getItem("TOKEN"));
+  const [role] = useState(localStorage.getItem("ROLE"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -19,6 +22,7 @@ const Profile = () => {
         setAdministrateur(response.data.administrateur);
       } catch (error) {
         console.error("Erreur lors de la récupération du profil :", error);
+
         setAdministrateur(null);
       }
     };
@@ -36,8 +40,8 @@ const Profile = () => {
   return (
     <>
       <DashboardNavbar />
-      <div className="min-h-[calc(100vh-5rem)] pt-6 bg-gray-100 flex items-center justify-center">
-        <div className="bg-white shadow-lg rounded-2xl w-full max-w-3xl p-6 m-auto">
+      <div className="min-h-[calc(100vh-5rem)] pt-6 flex items-center justify-center">
+        <div className="bg-white shadow-lg rounded-2xl w-full max-w-4xl  p-6 m-auto">
           {/* Header modifié avec avatar et statut */}
           <div className="flex items-center space-x-6 border-b pb-6">
             <div className="h-20 w-20 rounded-full bg-green-600 flex items-center justify-center text-white text-xl font-bold">
@@ -91,7 +95,7 @@ const Profile = () => {
               <div>
                 <label className="text-gray-500 text-sm">Ville / Centre</label>
                 <p className="text-lg font-medium">
-                  {administrateur.villeCentre}
+                  {administrateur.villeCentre.nomCentre}
                 </p>
               </div>
             )}
@@ -99,15 +103,20 @@ const Profile = () => {
 
           {/* Actions */}
           <div className="mt-8 flex gap-4 flex-wrap">
-            <button className="border border-blue-600 hover:bg-blue-600 hover:text-white text-blue-600 cursor-pointer px-4 py-2 rounded-lg flex items-center gap-2">
-              <FaEdit /> Modifier
-            </button>
-            <button className="border border-yellow-500 hover:bg-yellow-600 text-yellow-600 cursor-pointer hover:text-white px-4 py-2 rounded-lg flex items-center gap-2">
+            
+            <button
+              onClick={() => {
+                role === "ADMIN"
+                  ? navigate("/admin/reset")
+                  : navigate("/general/reset");
+              }}
+              className=" duration-300 ease-in-out  border border-yellow-500 hover:bg-yellow-600 text-yellow-600 cursor-pointer hover:text-white px-4 py-2 rounded-lg flex items-center gap-2"
+            >
               <FaKey /> Changer le mot de passe
             </button>
             <button
               onClick={handleLogout}
-              className="cursor-pointer bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 ml-auto"
+              className=" duration-300 ease-in-out  cursor-pointer bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 ml-auto"
             >
               <FaSignOutAlt /> Déconnexion
             </button>

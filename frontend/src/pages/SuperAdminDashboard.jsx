@@ -13,7 +13,7 @@ const SuperAdminDashboard = () => {
   useEffect(() => {
     const fetchCentresData = async () => {
       try {
-        const res = await api.get("/superadmin/centres/data", {
+        const res = await api.get("/adminsuperadmin/centres/data", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

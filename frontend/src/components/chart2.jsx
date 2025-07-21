@@ -30,7 +30,8 @@ function getSatisfactionChartData(apiData, selectedYear, selectedType) {
   if (selectedType === "Genéral") {
     monthlyData = apiData.generalTotalMonthlyAvis?.[selectedYear] || {};
   } else {
-    monthlyData = apiData.totalMonthlyAvisByType?.[selectedType]?.[selectedYear] || {};
+    monthlyData =
+      apiData.totalMonthlyAvisByType?.[selectedType]?.[selectedYear] || {};
   }
 
   const sortedMonths = monthOrder.filter((month) => monthlyData[month]);
@@ -55,11 +56,12 @@ export default function CenterChart() {
   const [selectedType, setSelectedType] = useState("Genéral");
   const [apiData, setApiData] = useState(null);
   const [token] = useState(localStorage.getItem("TOKEN"));
+  const idCentre = localStorage.getItem("ID_CENTRE");
 
   useEffect(() => {
     const fetchCentresData = async () => {
       try {
-        const res = await api.get("/adminsuperadmin/centres/total", {
+        const res = await api.get(`/adminsuperadmin/centres/centreData/${idCentre}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -73,7 +75,11 @@ export default function CenterChart() {
     fetchCentresData();
   }, [token]);
 
-  const chartData = getSatisfactionChartData(apiData, selectedYear, selectedType);
+  const chartData = getSatisfactionChartData(
+    apiData,
+    selectedYear,
+    selectedType
+  );
 
   const chartConfig = {
     type: "bar",
@@ -141,13 +147,17 @@ export default function CenterChart() {
             <Typography variant="h6" color="blue-gray">
               Taux de satisfaction global
             </Typography>
-            <Typography variant="small" color="gray" className="max-w-sm font-normal">
-              Évolution du taux de satisfaction des employés en fonction du temps
+            <Typography
+              variant="small"
+              color="gray"
+              className="max-w-sm font-normal"
+            >
+              Évolution du taux de satisfaction des employés en fonction du
+              temps
             </Typography>
           </div>
         </div>
 
-        
         <select
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value)}
@@ -168,7 +178,6 @@ export default function CenterChart() {
             ))}
         </select>
 
-        
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}

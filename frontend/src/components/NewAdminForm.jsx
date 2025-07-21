@@ -14,7 +14,7 @@ function NewAdminForm() {
   useEffect(() => {
     const fetchCentres = async () => {
       try {
-        const res = await api.get("/superadmin/centres", {
+        const res = await api.get("/adminsuperadmin/centres", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

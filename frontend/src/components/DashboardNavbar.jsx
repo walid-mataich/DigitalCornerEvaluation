@@ -21,6 +21,11 @@ const DashboardNavbar = () => {
       path: "/general/dashboard",
     },
     {
+      label: "Feedback",
+      icon: <MdAssignment className="h-6 w-6 text-slate-500" />,
+      path: "/general/feedback",
+    },
+    {
       label: "Administrateurs",
       icon: <MdPeople className="h-6 w-6 text-slate-500" />,
       path: "/general/administrateurs",
@@ -30,17 +35,11 @@ const DashboardNavbar = () => {
       icon: <MdSpaceDashboard className="h-6 w-6 text-slate-500" />,
       path: "/general/centres",
     },
-     {
-      label: "Feedback",
-      icon: <MdAssignment className="h-6 w-6 text-slate-500" />,
-      path: "/general/feedback",
-    },
     {
       label: "Compte",
       icon: <MdPerson className="h-7 w-7 text-slate-500 border rounded-full" />,
       path: "/general/profile",
     },
-   
   ];
 
   const adminLinks = [
@@ -48,6 +47,11 @@ const DashboardNavbar = () => {
       label: "Dashboard",
       icon: <MdDashboard className="h-6 w-6 text-slate-500" />,
       path: "/admin/dashboard",
+    },
+    {
+      label: "Feedback",
+      icon: <MdAssignment className="h-6 w-6 text-slate-500" />,
+      path: "/admin/feedback",
     },
 
     {
