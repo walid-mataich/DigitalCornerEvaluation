@@ -73,3 +73,20 @@ cd frontend
 npm install
 npm run dev
 ```
+
+
+## 🧪 Tests & Connexion
+
+### ✅ Étapes pour tester l'application :
+
+1. **Importer la base de données** :
+   - Utilisez un outil comme **phpMyAdmin**, **MySQL Workbench** ou la ligne de commande.
+   - Importez le fichier `.sql`.
+
+2. **Utilisez l’un des comptes suivants pour vous connecter** :
+
+| Rôle            | Email                       | Mot de passe |
+|-----------------|-----------------------------|--------------|
+| Super Admin     | walidmt222@gmail.com        | `aa2019`     |
+| Administrateur  | walidmataich1@gmail.com     | `aa2019`     |
+
