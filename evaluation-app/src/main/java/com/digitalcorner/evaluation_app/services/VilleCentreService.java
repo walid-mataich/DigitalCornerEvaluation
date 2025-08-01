@@ -156,4 +156,36 @@ return result;
         }
     }
 
+    public void addCentre(VilleCentre vc) {
+        try {
+            VilleCentre newVc = new VilleCentre();
+            newVc.setCodeCentre(vc.getCodeCentre());
+            newVc.setNomCentre(vc.getNomCentre());
+
+            villeCentreRepository.save(newVc);
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de l'ajout du centre : " + e.getMessage(), e);
+        }
+    }
+
+
+    public void updateCentre(Long id, VilleCentre updatedCentre) {
+        VilleCentre centre = villeCentreRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Centre introuvable avec id : " + id));
+
+        centre.setNomCentre(updatedCentre.getNomCentre());
+        centre.setCodeCentre(updatedCentre.getCodeCentre());
+
+        villeCentreRepository.save(centre);
+    }
+
+
+    public void deleteCentre(Long id) {
+        if (!villeCentreRepository.existsById(id)) {
+            throw new RuntimeException("Centre introuvable avec id : " + id);
+        }
+        villeCentreRepository.deleteById(id);
+    }
+
+
 }

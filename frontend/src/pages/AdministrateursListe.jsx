@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import DashboardNavbar from "../components/DashboardNavbar";
 import api from "../api/axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
-/**
- * Composant affichant la liste des administrateurs
- */
 const AdministrateursListe = () => {
   const [administrateurs, setAdministrateurs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("TOKEN");
+  const navigate = useNavigate();
 
-  /**
-   * Récupère la liste des administrateurs depuis l'API
-   */
   const fetchAdministrateurs = async () => {
     if (!token) {
       setError("Aucun token d'authentification trouvé.");
@@ -25,15 +20,15 @@ const AdministrateursListe = () => {
 
     try {
       const response = await api.get("/superadmin/get-all-users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-
       const { adminList = [] } = response.data;
       setAdministrateurs(adminList);
     } catch (err) {
-      console.error("Erreur lors de la récupération des administrateurs :", err);
+      console.error(
+        "Erreur lors de la récupération des administrateurs :",
+        err
+      );
       setError("Impossible de charger la liste des administrateurs.");
     } finally {
       setLoading(false);
@@ -43,6 +38,30 @@ const AdministrateursListe = () => {
   useEffect(() => {
     fetchAdministrateurs();
   }, [token]);
+
+  // Supprimer un administrateur par id
+  const handleDelete = async (id) => {
+    if (!window.confirm("Voulez-vous vraiment supprimer cet administrateur ?"))
+      return;
+
+    try {
+      await api.delete(`/superadmin/delete/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      // Mise à jour locale sans refaire fetch complet
+      setAdministrateurs((prev) =>
+        prev.filter((admin) => admin.idAdministrateur !== id)
+      );
+    } catch (err) {
+      console.error("Erreur lors de la suppression :", err);
+      alert("Erreur lors de la suppression de l'administrateur.");
+    }
+  };
+
+  // Modifier : navigation vers page édition
+  const handleEdit = (id) => {
+    navigate(`/general/editadmin/${id}`);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -111,12 +130,14 @@ const AdministrateursListe = () => {
                       </td>
                       <td className="px-6 py-4 text-center whitespace-nowrap">
                         <button
+                          onClick={() => handleEdit(admin.idAdministrateur)}
                           className="cursor-pointer text-green-700 hover:text-green-900 mx-2 transition-colors duration-150"
                           aria-label="Modifier"
                         >
                           <FaEdit />
                         </button>
                         <button
+                          onClick={() => handleDelete(admin.idAdministrateur)}
                           className="cursor-pointer text-red-600 hover:text-red-800 mx-2 transition-colors duration-150"
                           aria-label="Supprimer"
                         >

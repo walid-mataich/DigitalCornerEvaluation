@@ -27,6 +27,7 @@ public class Administrateur implements UserDetails {
 
     private String prenom;
 
+    @JsonIgnore
     private String password;
 
     private String email;

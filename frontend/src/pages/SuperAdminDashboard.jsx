@@ -5,6 +5,7 @@ import LowestSatisfactionCard from "../components/LowestSatisfactionCard";
 import SatisfactionChart from "../components/SatisfactionChart";
 import api from "../api/axios";
 import { Riple } from "react-loading-indicators";
+import { Link } from "react-router-dom";
 
 const SuperAdminDashboard = () => {
   const [centersData, setCentersData] = useState([]);
@@ -18,6 +19,7 @@ const SuperAdminDashboard = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        // console.log(res.data);
         setCentersData(res.data);
       } catch (err) {
         console.error("Erreur lors du chargement des centres :", err.message);
@@ -46,9 +48,11 @@ const SuperAdminDashboard = () => {
       "décembre",
     ];
 
-    const currentMonthName = monthNames[now.getMonth()]; // e.g., "juillet"
+    const currentMonthName = monthNames[now.getMonth()];
 
     const monthlyData = center.yearlyMonthly?.[currentYear]?.[currentMonthName];
+
+    // console.log(`Centre: ${center.villeCentreNom}, Données mois:`, monthlyData);
 
     if (!monthlyData) {
       // Fallback to 0s if no data for this month
@@ -57,10 +61,11 @@ const SuperAdminDashboard = () => {
         { name: "Satisfait", value: 0 },
         { name: "Peu satisfait", value: 0 },
         { name: "Pas du tout satisfait", value: 0 },
+        { id: center.villeCentreId, name: center.villeCentreNom },
       ];
     }
 
-    return [
+    const result = [
       { name: "Très satisfait", value: monthlyData.tresSatisfaitNb },
       { name: "Satisfait", value: monthlyData.satisfaitNb },
       { name: "Pas satisfait", value: monthlyData.peuSatisfaitNb },
@@ -68,7 +73,10 @@ const SuperAdminDashboard = () => {
         name: "Pas satisfait du tout",
         value: monthlyData.pasDuToutSatisfaitNb,
       },
+      { id: center.villeCentreId, name: center.villeCentreNom },
     ];
+
+    return result;
   };
 
   return (
@@ -84,7 +92,8 @@ const SuperAdminDashboard = () => {
             <div className="lg:col-span-2 lg:row-span-4">
               <LowestSatisfactionCard
                 badPercentage={(
-                  (centersData[0]?.pasDuToutSatisfaitNb /
+                  ((centersData[0]?.peuSatisfaitNb +
+                    centersData[0]?.pasDuToutSatisfaitNb) /
                     (centersData[0]?.tresSatisfaitNb +
                       centersData[0]?.satisfaitNb +
                       centersData[0]?.peuSatisfaitNb +
@@ -100,7 +109,10 @@ const SuperAdminDashboard = () => {
                 Taux de satisfaction pour ce mois
               </h2>
 
-              <button className="flex items-center text-center rounded-md cursor-pointer border border-green-600 py-1 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-green-600 hover:text-white hover:bg-green-600 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+              <Link
+                to="/general/moreCenters"
+                className="flex items-center text-center rounded-md cursor-pointer border border-green-600 py-1 px-4 text-sm transition-all shadow-sm hover:shadow-lg text-green-600 hover:text-white hover:bg-green-600 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              >
                 Afficher plus
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +126,7 @@ const SuperAdminDashboard = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              </button>
+              </Link>
             </div>
 
             {centersData.slice(0, 3).map((center, index) => (

@@ -1,5 +1,3 @@
-// src/components/LowestSatisfactionCard.jsx
-import React from "react";
 
 const LowestSatisfactionCard = ({ centerName, badPercentage }) => {
   return (

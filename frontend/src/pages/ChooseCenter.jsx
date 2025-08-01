@@ -16,7 +16,7 @@ const ChooseCenter = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(res.data);
+        // console.log(res.data);
         setCentres(res.data);
       } catch (err) {
         console.error("Erreur lors du chargement des centres :", err.message);

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import OCPFR from "../assets/OCPFR.png";
+import OCPFR from "../assets/OCPFR.WebP";
 import {
   MdDashboard,
   MdPlace,
@@ -58,6 +58,7 @@ const DashboardNavbar = () => {
       label: "Evaluation",
       icon: <MdPlace className="h-6 w-6 text-slate-500" />,
       path: "/admin/evaluation",
+      state: { requestFullscreen: true },
     },
     {
       label: "Compte",
@@ -77,7 +78,7 @@ const DashboardNavbar = () => {
             to="/general/dashboard"
             className="mr-4 block cursor-pointer py-1.5 text-base text-slate-800 font-semibold"
           >
-            <img src={OCPFR} className="h-7" alt="OCP Logo" />
+            <img src={OCPFR} className="h-7 w-auto" alt="OCP Logo" />
           </Link>
 
           <div className="hidden lg:block">
@@ -88,7 +89,11 @@ const DashboardNavbar = () => {
                   className="flex items-center p-1 text-sm gap-x-2 text-green-700"
                 >
                   {link.icon}
-                  <Link to={link.path} className="flex items-center">
+                  <Link
+                    to={link.path}
+                    state={link.state}
+                    className="flex items-center"
+                  >
                     {link.label}
                   </Link>
                 </li>

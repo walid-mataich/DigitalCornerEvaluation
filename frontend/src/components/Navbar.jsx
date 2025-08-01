@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../assets/logo.jpg";
-import OCPFR from "../assets/OCPFR.png";
+import OCPFR from "../assets/OCPFR.WebP";
 import { Link } from "react-router-dom";
 
 function Navbar() {

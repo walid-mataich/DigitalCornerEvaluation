@@ -14,7 +14,7 @@ const Test = ({}) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("Profil administrateur récupéré :", response.data);
+        // console.log("Profil administrateur récupéré :", response.data);
         setAdministrateur(response.data.administrateur);
       } catch (error) {
         console.error("Erreur lors de la récupération du profil :", error);

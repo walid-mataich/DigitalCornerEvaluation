@@ -87,10 +87,6 @@ public class AdministrateurController {
         return  ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @DeleteMapping("/superadmin/delete/{userId}")
-    public ResponseEntity<RequestResponse> deleteUSer(@PathVariable Long userId){
-        return ResponseEntity.ok(administrateurService.deleteAdmin(userId));
-    }
 
 
 
@@ -110,6 +106,28 @@ public class AdministrateurController {
     @PostMapping("/auth/forgotpassword/modifyPassword/{email}/{newPassword}")
     public ResponseEntity<String> modifyPassword(@PathVariable String email,@PathVariable String newPassword){
         return administrateurService.modifyPassword(newPassword, email);
+    }
+
+
+    @PutMapping("/superadmin/modify/{id}")
+    public ResponseEntity<Administrateur> modifierAdministrateur(@PathVariable Long id,
+                                                                 @RequestBody Administrateur administrateur) {
+        try {
+            Administrateur updatedAdmin = administrateurService.updateAdministrateur(id, administrateur);
+            return ResponseEntity.ok(updatedAdmin);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/superadmin/delete/{id}")
+    public ResponseEntity<Void> supprimerAdministrateur(@PathVariable Long id) {
+        try {
+            administrateurService.deleteAdministrateur(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

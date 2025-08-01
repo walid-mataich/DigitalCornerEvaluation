@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import UserService from "../services/UserService";
 import { Riple } from "react-loading-indicators";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useLocation } from "react-router-dom";
 
 function Evaluation() {
   const [user, setUser] = useState(null);
@@ -15,7 +16,7 @@ function Evaluation() {
     const fetchUser = async () => {
       try {
         const res = await UserService.getYourProfile(token);
-        console.log("User data:", res);
+        // console.log("User data:", res);
         setUser(res.administrateur);
       } catch (err) {
         console.error("Failed to fetch user:", err.message);
@@ -31,6 +32,26 @@ function Evaluation() {
     }
   }, [token]);
 
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.requestFullscreen) {
+      const goFullscreen = () => {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen();
+        }
+      };
+
+      // Delay to allow page to mount before requesting fullscreen
+      setTimeout(goFullscreen, 100); // You can tweak the delay
+    }
+  }, [location]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -42,26 +63,27 @@ function Evaluation() {
   if (!user || !user.villeCentre) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-xl shadow-md border border-red-200">
-        <div className="flex items-center justify-center w-16 h-16 bg-red-100 rounded-full">
-          <ExclamationTriangleIcon className="w-8 h-8 text-red-600" />
+        <div className="flex flex-col items-center gap-4 p-4 bg-white rounded-xl shadow-md border border-red-200">
+          <div className="flex items-center justify-center w-16 h-16 bg-red-100 rounded-full">
+            <ExclamationTriangleIcon className="w-8 h-8 text-red-600" />
+          </div>
+          <h2 className="text-xl font-semibold text-red-700">
+            Informations d'administrateur non disponibles.
+          </h2>
+          <p className="text-sm text-gray-500 text-center">
+            Veuillez réessayer ou contacter le support technique si le problème
+            persiste.
+          </p>
         </div>
-        <h2 className="text-xl font-semibold text-red-700">Informations d'administrateur non disponibles.</h2>
-        <p className="text-sm text-gray-500 text-center">
-          Veuillez réessayer ou contacter le support technique si le problème persiste.
-        </p>
       </div>
-    </div>
     );
   }
 
   return (
     <div>
       <section className="min-h-screen bg-green-100 dark:bg-green-900 flex items-center justify-center">
-        <div className="space-y-4">
-          
+        <div className="space-y-3 ">
           <SatisfactionRadioGroup codeCentre={user.villeCentre.idCentre} />
-          
         </div>
       </section>
     </div>

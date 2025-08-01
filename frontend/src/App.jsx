@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import "./App.css";
 import Form from "./components/Login";
 import {
@@ -12,6 +12,7 @@ import EmplyeHome from "./pages/EmplyeHome";
 import Test from "./pages/test";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
+
 import AdminDashboard from "./pages/AdminDashboard";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
 import ChooseCenter from "./pages/ChooseCenter";
@@ -24,6 +25,12 @@ import EvaluationsWithComments from "./pages/EvaluationsWithComments";
 import Profile from "./pages/Profile";
 import ChangePassword from "./pages/ChangePassword";
 import AdminComments from "./pages/AdminComments";
+import EachCenterData from "./pages/EachCenterData";
+import EvaluationTable from "./components/EvaluationTableTotalCenter";
+import AllCenters from "./pages/AllCenters";
+import EditAdminForm from "./components/EditAdminForm";
+import NewCentreForm from "./components/newCentreForm";
+import EditCentreForm from "./components/EditCentreForm";
 
 function App() {
   const router = createBrowserRouter(
@@ -34,8 +41,6 @@ function App() {
         <Route path="/avis" element={<EmplyeHome />} />
         <Route path="/test" element={<Test />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
-        {/* <Route path="/evaluation" element={<ChooseCenter />} /> */}
-
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
@@ -51,12 +56,23 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={["SUPERADMIN"]} />}>
           <Route path="/general">
             <Route path="dashboard" element={<SuperAdminDashboard />} />
+
             <Route path="administrateurs" element={<AdministrateursListe />} />
             <Route path="newadmin" element={<AjouterAdmin />} />
             <Route path="feedback" element={<EvaluationsWithComments />} />
             <Route path="centres" element={<CentrePage />} />
             <Route path="profile" element={<Profile />} />
             <Route path="reset" element={<ChangePassword />} />
+            <Route path="center/:idCentre" element={<EachCenterData />} />
+            <Route path="editadmin/:id" element={<EditAdminForm />} />
+            <Route path="editcentre/:id" element={<EditCentreForm />} />
+
+            <Route
+              path="CenterFeedback/:idCentre"
+              element={<EvaluationTable />}
+            />
+            <Route path="moreCenters" element={<AllCenters />} />
+            <Route path="newCentre" element={<NewCentreForm />} />
           </Route>
         </Route>
       </>

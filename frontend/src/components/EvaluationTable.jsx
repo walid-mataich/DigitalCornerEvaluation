@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function EvaluationTable({ evaluations }) {
+export default function EvaluationTable({ evaluations, idCentre }) {
   const [filterType, setFilterType] = useState("");
   const [filterSentiment, setFilterSentiment] = useState("");
+  const role = localStorage.getItem("ROLE");
 
   const uniqueTypes = [...new Set(evaluations.map((e) => e.type))];
   const sentimentOptions = [
@@ -55,7 +56,7 @@ export default function EvaluationTable({ evaluations }) {
           ))}
         </select>
         <Link
-          to="/admin/feedback"
+          to={role=="ADMIN"?"/admin/feedback":`/general/CenterFeedback/${idCentre}`}
           className="px-4 py-2  border-1 border-green-700 rounded-lg hover:bg-green-700 hover:text-white transition-colors"
         >
           Voir toutes les évaluations

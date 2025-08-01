@@ -18,20 +18,20 @@ public class EvaluationController {
         this.evaluationService = evaluationService;
     }
 
-//    api to add evaluations : st3mlo hakka : expl: http://localhost:8080/api/evaluations/add?idCentre=1&avis="tres satisfais"
+
     @PostMapping("/adminsuperadmin/evaluations/add")
     public void addEvaluation(@RequestParam Long idCentre, @RequestParam String avis, @RequestParam String type, @RequestParam String comment) {
         evaluationService.addEvaluation(avis, idCentre, type, comment);
     }
 
-    // api to delete evaluation
+
     @DeleteMapping("/superadmin/evaluations/deleteById")
     void deleteEvaluation(@RequestParam Long idEvaluation) {
         evaluationService.deleteEvaluation(idEvaluation);
     }
 
 
-    //api to delete all evaluations dyal centre wa7d
+
     @DeleteMapping("/adminsuperadmin/evaluations/deleteByCenter")
     void deleleByCente(@RequestParam Long idCenter) {
         evaluationService.deleteEvaluationsByCenter(idCenter);

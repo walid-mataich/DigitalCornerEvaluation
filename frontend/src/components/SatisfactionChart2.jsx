@@ -12,22 +12,27 @@ const TYPES = [
   { key: "qualiteDeLaSolution", label: "Qualité de la solution" },
 ];
 
-const SatisfactionChart2 = () => {
+const SatisfactionChart2 = ({ idCentre }) => {
   const [rawData, setRawData] = useState(null);
-  const [year, setYear] = useState("2025");
-  const [month, setMonth] = useState("juillet");
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(
+    new Date().toLocaleString("fr-FR", { month: "long" })
+  );
   const [type, setType] = useState("general");
   const [chartData, setChartData] = useState([]);
-  const idCentre = localStorage.getItem("ID_CENTRE");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await api.get(`/adminsuperadmin/centres/centreData/1`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("TOKEN")}`,
-          },
-        });
+        const res = await api.get(
+          `/adminsuperadmin/centres/centreData/${idCentre}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("TOKEN")}`,
+            },
+          }
+        );
+        // console.log("Satisfaction data fetched:", res.data);
         setRawData(res.data);
       } catch (err) {
         console.error("Failed to fetch satisfaction stats", err);

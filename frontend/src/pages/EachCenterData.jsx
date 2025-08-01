@@ -1,12 +1,15 @@
 import React from "react";
-import EvaluationTableTotal from "../components/EvaluationTableTotal";
-import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import api from "../api/axios";
+import Chart2 from "../components/chart2";
+import SatisfactionChart2 from "../components/SatisfactionChart2";
+import EvaluationTable from "../components/EvaluationTable";
 import DashboardNavbar from "../components/DashboardNavbar";
 
-const AdminComments = () => {
+const EachCenterData = () => {
   const [data, setData] = useState(null);
-  const idCentre = localStorage.getItem("ID_CENTRE");
+  const { idCentre } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +19,9 @@ const AdminComments = () => {
             Authorization: `Bearer ${localStorage.getItem("TOKEN")}`,
           },
         });
+
         // console.log("Data fetched for center:", response.data[0]);
+
         setData(
           response.data.filter((item) => item.villeCentreId == idCentre)[0]
         );
@@ -40,17 +45,24 @@ const AdminComments = () => {
       </div>
     );
   }
+
   return (
-    <>
+    <div>
       <DashboardNavbar />
-      <div className="min-h-screen  p-4 md:p-6">
-        <div className="max-w-8xl mx-auto space-y-8">
+      <div className="grid grid-cols-5 grid-rows-6 gap-x-4 gap-y-1">
+        <div className="col-span-3 row-span-3">
+          <Chart2 idCentre={idCentre} nomCentre={data.villeCentreNom} />
+        </div>
+        <div className="col-span-2 row-span-3 col-start-4">
+          <SatisfactionChart2 idCentre={idCentre} />
+        </div>
+        <div className="col-span-5 row-span-3 row-start-4">
           {/* Recent Evaluations */}
-          <EvaluationTableTotal evaluations={data.evaluations} />
+          <EvaluationTable evaluations={data.evaluations} idCentre={idCentre} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default AdminComments;
+export default EachCenterData;

@@ -87,7 +87,7 @@ export default function SatisfactionStepper({ codeCentre }) {
   const selected = ratings[key];
 
   return (
-    <div className="w-full max-w-xl mx-auto p-4">
+    <div className="w-full max-w-xl mx-auto p-3">
       <p className="text-center text-gray-800 dark:text-gray-300 text-base sm:text-lg mb-10">
         Merci de prendre un moment pour évaluer votre satisfaction. <br />
         Ce questionnaire rapide comporte <strong>3 étapes</strong> portant sur
@@ -145,7 +145,7 @@ export default function SatisfactionStepper({ codeCentre }) {
         {options.map((opt) => (
           <label
             key={opt.value}
-            className={`cursor-pointer px-8 py-6 rounded-2xl text-lg font-medium text-center shadow-md border transition-all ${color(
+            className={`cursor-pointer  py-6 rounded-2xl text-lg font-medium text-center shadow-md border transition-all ${color(
               opt.value,
               selected
             )}`}

@@ -1,10 +1,9 @@
-import React from "react";
+
 import {
   PieChart,
   Pie,
   Cell,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 import { MdOutlinePlace } from "react-icons/md";
@@ -17,7 +16,10 @@ const SatisfactionChart = ({ data, centerName }) => {
     <div className="bg-white  rounded-2xl shadow-md p-6 w-full max-w-md mx-auto">
       <div className="flex items-center gap-2  ">
         <MdOutlinePlace className="text-2xl text-gray-700" />
-        <Link to={"/"} className="text-xl  font-semibold   text-gray-700">
+        <Link
+          to={`/general/center/${data[4].id}`}
+          className="text-xl  font-semibold   text-gray-700"
+        >
           {centerName}
         </Link>
       </div>

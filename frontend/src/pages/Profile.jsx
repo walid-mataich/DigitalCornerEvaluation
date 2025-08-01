@@ -8,6 +8,8 @@ const Profile = () => {
   const [administrateur, setAdministrateur] = useState(null);
   const [token] = useState(localStorage.getItem("TOKEN"));
   const [role] = useState(localStorage.getItem("ROLE"));
+  const [isSending, setIsSending] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,7 +20,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("Profil administrateur récupéré :", response.data);
+        // console.log("Profil administrateur récupéré :", response.data);
         setAdministrateur(response.data.administrateur);
       } catch (error) {
         console.error("Erreur lors de la récupération du profil :", error);
@@ -36,6 +38,16 @@ const Profile = () => {
   };
 
   if (!administrateur) return null;
+  if (isSending) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white bg-opacity-90 backdrop-blur-md">
+        <div className="animate-spin rounded-full border-t-4 border-green-500 border-solid h-16 w-16 mb-6"></div>
+        <p className="text-lg font-semibold text-green-700">
+          Envoi de l'e-mail de vérification...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -103,12 +115,25 @@ const Profile = () => {
 
           {/* Actions */}
           <div className="mt-8 flex gap-4 flex-wrap">
-            
             <button
-              onClick={() => {
-                role === "ADMIN"
-                  ? navigate("/admin/reset")
-                  : navigate("/general/reset");
+              onClick={async () => {
+                setIsSending(true);
+                try {
+                  await api.post(
+                    `/auth/forgotpassword/verifyMail/${administrateur.email}`
+                  );
+                  alert(
+                    "Un lien de vérification a été envoyé à votre adresse e-mail."
+                  );
+
+                  role === "ADMIN"
+                    ? navigate("/admin/reset")
+                    : navigate("/general/reset");
+                } catch (err) {
+                  setIsSending(false);
+                  console.error("Erreur lors de l'envoi de l'e-mail :", err);
+                  alert("Une erreur est survenue lors de l'envoi de l'e-mail.");
+                }
               }}
               className=" duration-300 ease-in-out  border border-yellow-500 hover:bg-yellow-600 text-yellow-600 cursor-pointer hover:text-white px-4 py-2 rounded-lg flex items-center gap-2"
             >

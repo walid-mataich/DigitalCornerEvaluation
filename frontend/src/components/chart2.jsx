@@ -51,21 +51,23 @@ function getSatisfactionChartData(apiData, selectedYear, selectedType) {
   return { categories, data };
 }
 
-export default function CenterChart() {
+export default function CenterChart({ idCentre, nomCentre }) {
   const [selectedYear, setSelectedYear] = useState("2025");
   const [selectedType, setSelectedType] = useState("Genéral");
   const [apiData, setApiData] = useState(null);
   const [token] = useState(localStorage.getItem("TOKEN"));
-  const idCentre = localStorage.getItem("ID_CENTRE");
 
   useEffect(() => {
     const fetchCentresData = async () => {
       try {
-        const res = await api.get(`/adminsuperadmin/centres/centreData/${idCentre}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await api.get(
+          `/adminsuperadmin/centres/centreData/${idCentre}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setApiData(res.data);
       } catch (err) {
         console.error("Erreur lors du chargement des centres :", err.message);
@@ -145,7 +147,7 @@ export default function CenterChart() {
           </div>
           <div>
             <Typography variant="h6" color="blue-gray">
-              Taux de satisfaction global
+              Taux de satisfaction global de {nomCentre}
             </Typography>
             <Typography
               variant="small"

@@ -54,8 +54,6 @@ export default function EvaluationTable({ evaluations }) {
             </option>
           ))}
         </select>
-      
-        
       </div>
 
       <div className="overflow-x-auto">
@@ -65,15 +63,15 @@ export default function EvaluationTable({ evaluations }) {
               <th className="px-4 py-2">Date</th>
               <th className="px-4 py-2">Type</th>
               <th className="px-4 py-2">Sentiment</th>
-              
+
               <th className="px-4 py-2">Commentaire</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {filteredEvaluations
-              
+
               .filter((e) => e.comment != null)
-              
+
               .map((evalData) => (
                 <tr key={evalData.idEvaluation} className="hover:bg-gray-50">
                   <td className="px-4 py-3">{evalData.date}</td>
@@ -84,11 +82,11 @@ export default function EvaluationTable({ evaluations }) {
                     <span
                       className={`inline-block px-2 py-1 rounded-full text-xs font-medium
                     ${
-                      evalData.avis.includes("tres satisfait")
+                      evalData.avis == "tres satisfait"
                         ? "bg-green-100 text-green-800"
-                        : evalData.avis.includes("satisfait")
-                        ? "bg-green-50 text-green-700"
-                        : evalData.avis.includes("peu satisfait")
+                        : evalData.avis == "satisfait"
+                        ? "bg-green-50 text-green-600"
+                        : evalData.avis == "peu satisfait"
                         ? "bg-yellow-100 text-yellow-800"
                         : "bg-red-100 text-red-800"
                     }`}
@@ -96,7 +94,7 @@ export default function EvaluationTable({ evaluations }) {
                       {evalData.avis}
                     </span>
                   </td>
-                  
+
                   <td className="px-4 py-3 max-w-xs truncate">
                     {evalData.comment || (
                       <span className="text-gray-400">No comment</span>

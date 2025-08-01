@@ -29,9 +29,9 @@ const ForgotPassword = () => {
       const response = await api.post(
         `/auth/forgotpassword/verifyOTP/${code}/${email}`
       );
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
-        console.log("OTP vérifié avec succès");
+        // console.log("OTP vérifié avec succès");
         setStep2(false);
         setStep3(true);
       } else {
@@ -52,7 +52,7 @@ const ForgotPassword = () => {
       const response = await api.post(
         `/auth/forgotpassword/modifyPassword/${email}/${newPassword}`
       );
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         alert("Mot de passe modifié avec succès");
         navigate("/login");

@@ -13,6 +13,22 @@ const CentrePage = () => {
   const [error, setError] = useState(null);
   const token = localStorage.getItem("TOKEN");
 
+  const handleDelete = async (idCentre) => {
+    if (!window.confirm("Êtes-vous sûr de vouloir supprimer ce centre ?"))
+      return;
+
+    try {
+      await api.delete(`/adminsuperadmin/centres/delete/${idCentre}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      alert("Centre supprimé avec succès !");
+      fetchCentres(); // Rafraîchir la liste
+    } catch (err) {
+      console.error("Erreur suppression :", err);
+      alert("Erreur lors de la suppression.");
+    }
+  };
+
   /**
    * Récupère la liste des centres depuis l'API
    */
@@ -24,7 +40,7 @@ const CentrePage = () => {
     }
 
     try {
-      const response = await api.get("/superadmin/centres", {
+      const response = await api.get("/adminsuperadmin/centres", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -63,7 +79,9 @@ const CentrePage = () => {
             </div>
 
             {loading ? (
-              <div className="text-center py-6 text-gray-500">Chargement...</div>
+              <div className="text-center py-6 text-gray-500">
+                Chargement...
+              </div>
             ) : error ? (
               <div className="text-center py-6 text-red-500">{error}</div>
             ) : centres.length === 0 ? (
@@ -81,7 +99,10 @@ const CentrePage = () => {
                       <th className="px-6 py-3 text-left text-xs font-semibold text-green-700 uppercase tracking-wider">
                         Centre
                       </th>
-                      
+                      <th className="px-6 py-3 text-left text-xs font-semibold text-green-700 uppercase tracking-wider">
+                        Code
+                      </th>
+
                       <th className="px-6 py-3 text-center text-xs font-semibold text-green-700 uppercase tracking-wider">
                         Actions
                       </th>
@@ -99,15 +120,21 @@ const CentrePage = () => {
                         <td className="px-6 py-4 font-medium text-green-700 whitespace-nowrap">
                           {centre.nomCentre}
                         </td>
-                        
+                        <td className="px-6 py-4 font-medium text-green-700 whitespace-nowrap">
+                          {centre.codeCentre}
+                        </td>
+
                         <td className="px-6 py-4 text-center whitespace-nowrap space-x-2">
+                          <Link to={`/general/editcentre/${centre.idCentre}`}>
+                            <button
+                              className="cursor-pointer text-green-700 hover:text-green-900 mx-2 p-1 transition-colors duration-150"
+                              aria-label="Modifier"
+                            >
+                              <FaEdit />
+                            </button>
+                          </Link>
                           <button
-                            className="cursor-pointer text-green-700 hover:text-green-900 mx-2 p-1 transition-colors duration-150"
-                            aria-label="Modifier"
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
+                            onClick={() => handleDelete(centre.idCentre)}
                             className="cursor-pointer text-red-600 hover:text-red-800 mx-2 p-1 transition-colors duration-150"
                             aria-label="Supprimer"
                           >

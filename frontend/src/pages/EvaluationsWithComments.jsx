@@ -1,14 +1,12 @@
-import React, { use } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
-import OCPFR from "../assets/OCPFR.png";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import DashboardNavbar from "../components/DashboardNavbar";
 
-const EvaluationsWithComments = () => {
+export default function EvaluationsWithComments() {
   const [feedbackData, setFeedbackData] = useState([]);
   const [token] = useState(localStorage.getItem("TOKEN"));
+  const [filterType, setFilterType] = useState("");
+  const [filterSentiment, setFilterSentiment] = useState("");
 
   useEffect(() => {
     const fetchFeedbackData = async () => {
@@ -25,67 +23,116 @@ const EvaluationsWithComments = () => {
       }
     };
     fetchFeedbackData();
-  }, []);
+  }, [token]);
 
-  const header = (
-    <div className="py-3 px-6 bg-white shadow-md rounded-md ">
-      <h2 className="text-2xl font-bold text-gray-800 text-center tracking-wide">
-        Liste des évaluations commentées
-      </h2>
-    </div>
+  const uniqueTypes = [...new Set(feedbackData.map((e) => e.type))];
+  const sentimentOptions = [
+    "trés satisfait",
+    "satisfait",
+    "peu satisfait",
+    "pas du tout satisfait",
+  ];
+
+  const filteredData = feedbackData.filter(
+    (evaluation) =>
+      (filterType === "" || evaluation.type === filterType) &&
+      (filterSentiment === "" ||
+        evaluation.avis.trim().toLowerCase() ===
+          filterSentiment.trim().toLowerCase()) &&
+      evaluation.commentaire != null
   );
-  const footer = (
-    <div className="bg-gray-50 border-t text-sm text-gray-600 text-right rounded-b-md">
-      Total :{" "}
-      <span className="font-semibold text-gray-800">{feedbackData.length}</span>{" "}
-      évaluations
-    </div>
-  );
-
-  const avisBodyTemplate = (rowData) => {
-    const avisClass =
-      {
-        "trés satisfait": "text-green-600 font-semibold",
-        satisfait: "text-green-700 font-semibold",
-        "peu satisfait": "text-orange-300 font-semibold",
-        "pas du tout satisfait": "text-red-700 font-bold",
-      }[rowData.avis] || "text-gray-500";
-
-    return <span className={avisClass}>{rowData.avis}</span>;
-  };
 
   return (
     <>
       <DashboardNavbar />
-      
-      <DataTable
-        value={feedbackData}
-        header={header}
-        footer={footer}
-        paginator
-        rows={5}
-        rowsPerPageOptions={[5, 10, 25, 50]}
-        tableStyle={{ minWidth: "50rem" }}
-        paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-        currentPageReportTemplate="{first} to {last} of {totalRecords}"
-        sortMode="single" // ou "multiple" si tu veux permettre de trier par plusieurs colonnes
-      >
-        <Column field="nomCentre" header="Centre" sortable></Column>
-        <Column
-          field="type"
-          header="Type d'evaluation"
-          style={{ fontWeight: "bolder" }}
-        ></Column>
-        <Column field="avis" header="Avis" body={avisBodyTemplate}></Column>
-        <Column
-          field="commentaire"
-          header="Commentaire"
-          style={{ width: "800px" }}
-        ></Column>
-        <Column field="date" header="Date" ></Column>
-      </DataTable>
+
+      <div className="py-3 px-6 bg-white shadow-md rounded-md mb-6">
+        <h2 className="text-2xl font-bold text-gray-800 text-center tracking-wide">
+          Liste des évaluations commentées
+        </h2>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-md px-4 md:p-6">
+        <div className="mb-4 flex flex-col md:flex-row gap-4">
+          <select
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+          >
+            <option value="">Filtrer par Type</option>
+            {uniqueTypes.map((type, idx) => (
+              <option key={idx} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+
+          <select
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={filterSentiment}
+            onChange={(e) => setFilterSentiment(e.target.value)}
+          >
+            <option value="">Filtrer par sentiment</option>
+            {sentimentOptions.map((sentiment, idx) => (
+              <option key={idx} value={sentiment}>
+                {sentiment}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto text-sm text-left">
+            <thead className="bg-gray-100 text-gray-600">
+              <tr>
+                <th className="px-4 py-2">Centre</th>
+                <th className="px-4 py-2">Type</th>
+                <th className="px-4 py-2">Avis</th>
+                <th className="px-4 py-2">Commentaire</th>
+                <th className="px-4 py-2">Date</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {filteredData.map((evalData) => (
+                <tr key={evalData.idEvaluation} className="hover:bg-gray-50">
+                  <td className="px-4 py-3">{evalData.nomCentre}</td>
+                  <td className="px-4 py-3">{evalData.type}</td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`inline-block px-2 py-1 rounded-full text-xs font-medium
+                      ${
+                        evalData.avis === "trés satisfait"
+                          ? "bg-green-100 text-green-800"
+                          : evalData.avis === "satisfait"
+                          ? "bg-green-50 text-green-600"
+                          : evalData.avis === "peu satisfait"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {evalData.avis}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 max-w-xs truncate">
+                    {evalData.commentaire || (
+                      <span className="text-gray-400">Aucun commentaire</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3">{evalData.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-gray-50 border-t text-sm text-gray-600 text-right p-3 rounded-b-md mt-2">
+          Total :{" "}
+          <span className="font-semibold text-gray-800">
+            {filteredData.length}
+          </span>{" "}
+          évaluations
+        </div>
+      </div>
     </>
   );
-};
-
-export default EvaluationsWithComments;
+}

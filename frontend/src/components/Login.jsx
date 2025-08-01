@@ -20,12 +20,12 @@ function Form() {
     try {
       setError("");
       const userData = await UserService.login(email, password);
-      console.log(userData);
+      // console.log(userData);
       if (userData.token) {
         localStorage.setItem("TOKEN", userData.token);
         localStorage.setItem("ROLE", userData.role);
         if (userData.idCentre) {
-          console.log("ID_CENTRE", userData.idCentre);
+          // console.log("ID_CENTRE", userData.idCentre);
           localStorage.setItem("ID_CENTRE", userData.idCentre);
         }
         userData.role == "ADMIN"
@@ -40,8 +40,8 @@ function Form() {
         }, 7000);
       }
     } catch (error) {
-      console.log(error);
-      console.error("Erreur lors de la connexion :", error);
+      // console.log(error);
+      // console.error("Erreur lors de la connexion :", error);
       setError(error.message);
       setTimeout(() => {
         setError("");
