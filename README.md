@@ -75,9 +75,9 @@ npm run dev
 ```
 
 
-## 🧪 Tests & Connexion
+##  Tests & Connexion
 
-### ✅ Étapes pour tester l'application :
+###  Étapes pour tester l'application :
 
 1. **Importer la base de données** :
    - Utilisez un outil comme **phpMyAdmin**, **MySQL Workbench** ou la ligne de commande.
