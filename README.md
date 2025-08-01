@@ -63,7 +63,7 @@ cd DigitalCornerEvaluation
 
 ### 2. Backend
 ```bash
-cd backend
+cd evaluation-app
 ./mvnw spring-boot:run
 ```
 
