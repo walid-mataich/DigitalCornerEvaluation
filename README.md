@@ -22,7 +22,6 @@ Cette application web vise à mesurer la satisfaction des employés vis-à-vis d
 - Authentification sécurisée.
 - Visualisation des statistiques du **centre assigné**.
 - Accès aux retours commentés.
-- Réception d’alertes en cas d’insatisfaction élevée.
 
 ### 🧑‍💼 Super Administrateur
 - Gestion des comptes administrateurs.
