@@ -2,15 +2,15 @@
 
 > Projet réalisé dans le cadre d’un stage au sein du service informatique du site OCP de Benguerir.
 
-## 🧩 Objectif
+##  Objectif
 
 Cette application web vise à mesurer la satisfaction des employés vis-à-vis du service informatique (notamment le **Digital Corner**) en recueillant leurs avis via une interface intuitive sur tablette. L'objectif est d'améliorer en continu la qualité du support informatique sur site.
 
 ---
 
-## ⚙️ Fonctionnalités
+##  Fonctionnalités
 
-### 🎯 Employés
+###  Employés
 - Accès à une interface de feedback via une tablette.
 - Évaluation de :
   - la qualité du service,
@@ -18,19 +18,19 @@ Cette application web vise à mesurer la satisfaction des employés vis-à-vis d
   - le comportement du personnel.
 - Ajout facultatif de commentaires.
 
-### 🔐 Administrateurs
+###  Administrateurs
 - Authentification sécurisée.
 - Visualisation des statistiques du **centre assigné**.
 - Accès aux retours commentés.
 
-### 🧑‍💼 Super Administrateur
+###  Super Administrateur
 - Gestion des comptes administrateurs.
 - Visualisation globale des statistiques de tous les centres.
 - Comparaison des performances des centres.
 
 ---
 
-## 🧪 Technologies Utilisées
+##  Technologies Utilisées
 
 | Composant     | Technologie         |
 |---------------|---------------------|
@@ -43,7 +43,7 @@ Cette application web vise à mesurer la satisfaction des employés vis-à-vis d
 
 ---
 
-## 🧱 Architecture
+##  Architecture
 
 Architecture full-stack découplée basée sur le modèle MVC :
 
@@ -53,7 +53,7 @@ Architecture full-stack découplée basée sur le modèle MVC :
 
 ---
 
-## 🚀 Installation (en local)
+##  Installation (en local)
 
 ### 1. Cloner le projet
 ```bash
